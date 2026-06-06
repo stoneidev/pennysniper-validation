@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.Python
+venv/
+.venv/
+
+# Data caches (large, regenerable)
+btc_cache/
+xrp_cache/
+polygon_minute_cache/
+price_cache/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Secrets
+.env
+*.key
+secrets.json
+
+# Outputs that are too large for git (>1MB regenerable from scripts)
+*.parquet
+results/csv/gap_universe_full.csv
+results/csv/breakout_universe.csv
+results/csv/sector_results.csv
+results/csv/comovement_results.csv
+
+# Logs (optional, kept locally)
+results/*.log
