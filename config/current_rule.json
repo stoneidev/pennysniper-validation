@@ -1,13 +1,15 @@
 {
-  "cons_d": 30,
+  "cons_d": 60,
   "entry_lo": 1.2,
   "entry_hi": 1.5,
-  "tp_ratio": 1.15,
+  "tp_ratio": 1.5,
   "hold_d": 30,
-  "valid_from": "2026-04-01",
+  "valid_from": "2026-06-01",
   "valid_until": "2026-06-30",
-  "trained_on_period": "2026-01-01_2026-04-01",
-  "train_n": 6,
+  "trained_on_period": "2026-03-01_2026-06-01",
+  "train_n": 3,
   "train_win_rate": 1.0,
-  "train_mean_return": 0.12999999999999992
+  "train_mean_return": 0.48,
+  "train_p10": 0.48,
+  "generated_at": "2026-06-07T17:00:22.238867"
 }

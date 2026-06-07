@@ -35,21 +35,29 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Determine if quarterly retrain needed
+      - name: Determine if monthly retrain needed
         id: retrain_check
         run: |
-          # Retrain on the 1st of Jan/Apr/Jul/Oct OR if config missing
+          # Retrain on the 1st of every month OR if config missing
+          # Also retrain if existing config's valid_until has passed
           DAY=$(date -u +%d)
-          MONTH=$(date -u +%m)
           if [ ! -f config/current_rule.json ]; then
             echo "retrain=true" >> $GITHUB_OUTPUT
             echo "Reason: config missing"
-          elif [ "$DAY" = "01" ] && [[ "$MONTH" =~ ^(01|04|07|10)$ ]]; then
+          elif [ "$DAY" = "01" ]; then
             echo "retrain=true" >> $GITHUB_OUTPUT
-            echo "Reason: quarter start"
+            echo "Reason: month start"
           else
-            echo "retrain=false" >> $GITHUB_OUTPUT
-            echo "Skipping retrain"
+            # Check if rule has expired
+            VALID_UNTIL=$(python -c "import json; print(json.load(open('config/current_rule.json')).get('valid_until', ''))")
+            TODAY=$(date -u +%Y-%m-%d)
+            if [ -n "$VALID_UNTIL" ] && [ "$TODAY" \> "$VALID_UNTIL" ]; then
+              echo "retrain=true" >> $GITHUB_OUTPUT
+              echo "Reason: rule expired (valid_until=$VALID_UNTIL)"
+            else
+              echo "retrain=false" >> $GITHUB_OUTPUT
+              echo "Skipping retrain"
+            fi
           fi
 
       - name: Fetch latest universe (yfinance)
@@ -57,9 +65,9 @@ jobs:
         env:
           PYTHONUNBUFFERED: '1'
 
-      - name: Quarterly retrain (if needed)
+      - name: Monthly retrain (if needed)
         if: steps.retrain_check.outputs.retrain == 'true'
-        run: python scripts/live/quarterly_retrain.py
+        run: python scripts/live/monthly_retrain.py
 
       - name: Run daily scanner & generate report
         run: |
