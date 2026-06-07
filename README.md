@@ -320,6 +320,9 @@ python scripts/live/june_2026_summary.py
 
 ## More Documentation
 
+### Resume / 이어서 작업할 때
+- **[SESSION_CONTEXT.md](docs/SESSION_CONTEXT.md)** — 다음 세션 resume guide (가장 먼저 읽기)
+
 ### For developers / 코드 수정자
 - **[scripts_overview.md](docs/scripts_overview.md)** — 모든 스크립트 한눈에
 - **[daily_report_guide.md](docs/daily_report_guide.md)** — `daily_report.py` 내부 구조 (수정 가이드)
