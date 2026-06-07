@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Long-term OOS — 2018-2026</title><style>
+:root{--bg:#0f1115;--panel:#181b22;--panel-2:#1f232c;--border:#2a2f3a;--text:#e8e8ea;--muted:#8b93a7;--accent:#4f8cff;--green:#1fbf75;--red:#ff5b6c;}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
+.container{max-width:1080px;margin:0 auto;padding:32px 20px 80px}
+header{padding-bottom:24px;border-bottom:1px solid var(--border);margin-bottom:28px}
+h1{margin:0 0 6px;font-size:26px;font-weight:700}h2{margin:0 0 14px;font-size:16px;font-weight:600}
+.sub{color:var(--muted);font-size:13px}.nav{margin-top:14px}.nav a{display:inline-block;margin-right:12px;color:var(--accent);text-decoration:none;font-size:13px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:20px}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.stat{background:var(--panel-2);border-radius:8px;padding:14px}
+.stat .label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.stat .value{font-size:22px;font-weight:700;margin-top:4px;font-variant-numeric:tabular-nums}
+.stat .value.green{color:var(--green)}.stat .value.red{color:var(--red)}
+table{width:100%;border-collapse:collapse}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);font-size:13px}
+th{background:var(--panel-2);color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-size:11px;font-weight:600}
+td.num{text-align:right;font-variant-numeric:tabular-nums}
+td.win{color:var(--green);font-weight:600}td.lose{color:var(--red);font-weight:600}
+footer{margin-top:40px;padding-top:20px;border-top:1px solid var(--border);color:var(--muted);font-size:11px}
+.note{padding:12px 16px;background:rgba(245,179,66,.08);border-left:3px solid #f5b342;border-radius:4px;font-size:13px;margin:12px 0}
+</style></head>
+<body><div class="container">
+  <header>
+    <h1>Long-term OOS Validation — 2018-01 to 2026-06</h1>
+    <div class="sub">Monthly rolling walk-forward (3-month train, 1-month apply). Stooq archive, all NASDAQ common stocks.</div>
+    <div class="nav">
+      <a href="./index.html">← All reports</a>
+      <a href="https://github.com/stoneidev/pennysniper-validation">GitHub</a>
+    </div>
+  </header>
+
+  <div class="card">
+    <h2>Aggregate Stats (8.5 years)</h2>
+    <div class="stats-grid">
+      <div class="stat"><div class="label">Total OOS trades</div><div class="value">102</div></div>
+      <div class="stat"><div class="label">Win rate</div><div class="value green">85.3%</div></div>
+      <div class="stat"><div class="label">Mean per trade</div><div class="value green">+16.24%</div></div>
+      <div class="stat"><div class="label">₩1M (25% alloc)</div><div class="value green">₩46,072,306<br><span style="font-size:11px;color:var(--muted)">+4507%</span></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Capital Curve (₩1M, 25% allocation, sequential)</h2>
+    
+<svg viewBox="0 0 1000 220" preserveAspectRatio="none" style="width:100%;height:240px">
+  <line x1="30" y1="189.74952159806227" x2="970" y2="189.74952159806227"
+        stroke="#2a2f3a" stroke-dasharray="4,4"/>
+  <path d="M 30.0 189.7 L 302.4 189.7 L 303.7 190.0 L 304.6 189.9 L 304.9 189.9 L 310.1 189.8 L 317.5 189.5 L 602.9 189.4 L 610.2 189.1 L 616.7 188.9 L 618.2 189.3 L 620.4 189.2 L 629.9 189.0 L 635.8 188.9 L 636.4 188.7 L 636.4 189.2 L 636.4 189.1 L 638.2 188.9 L 639.8 188.8 L 641.9 188.7 L 654.8 189.0 L 657.0 188.9 L 667.7 188.9 L 669.6 189.2 L 671.7 189.1 L 679.1 189.0 L 685.6 189.2 L 691.1 188.8 L 695.4 188.7 L 697.9 188.6 L 706.2 188.5 L 707.4 188.5 L 710.8 188.4 L 721.2 188.1 L 730.8 187.8 L 732.6 187.4 L 735.4 188.0 L 736.6 187.7 L 750.1 187.6 L 757.8 187.5 L 763.4 187.4 L 766.4 187.3 L 781.5 187.2 L 784.9 187.5 L 790.7 187.4 L 792.9 187.3 L 793.5 187.2 L 794.4 187.0 L 795.0 186.9 L 796.6 186.8 L 797.5 186.7 L 802.1 186.9 L 806.4 186.2 L 807.3 185.9 L 807.3 185.6 L 809.8 185.3 L 810.1 185.0 L 826.7 184.6 L 827.9 184.3 L 833.2 183.9 L 834.1 183.5 L 843.9 182.4 L 848.5 182.5 L 848.8 182.2 L 851.6 181.0 L 852.8 179.6 L 855.6 178.0 L 855.6 176.3 L 859.9 174.3 L 861.8 172.1 L 864.5 169.7 L 864.5 166.9 L 867.9 163.8 L 872.5 160.4 L 874.7 156.5 L 875.0 152.2 L 875.0 147.4 L 875.0 141.9 L 879.0 145.3 L 884.8 139.6 L 885.1 133.2 L 885.1 126.1 L 885.4 118.1 L 886.1 109.2 L 887.6 99.2 L 890.4 88.0 L 890.4 75.4 L 890.4 61.4 L 891.6 70.3 L 896.8 55.6 L 897.7 76.0 L 899.0 62.0 L 905.4 52.8 L 917.7 43.1 L 920.2 38.2 L 925.7 33.2 L 930.0 30.0 L 932.2 49.2 L 934.6 46.3 L 937.1 69.1 L 967.2 66.7 L 969.7 64.2 L 970.0 61.6" stroke="#1fbf75" stroke-width="2" fill="none"/>
+  <text x="30" y="18" fill="#e8e8ea" font-size="12" font-weight="600">
+    ₩1M start → ₩46,072,306 (+4507%)
+  </text>
+</svg>
+
+    <div class="note">Curve uses sequential per-trade compounding without overlap. Real trading would have parallel positions and broker constraints.</div>
+  </div>
+
+  <div class="card">
+    <h2>Per-year Breakdown</h2>
+    <table><tr><th>Year</th><th>Trades</th><th>Win%</th><th>Mean</th><th>Sum</th><th>₩1M (25%)</th></tr><tr>
+          <td>2020</td>
+          <td class="num">6</td>
+          <td class="num">83%</td>
+          <td class="num win">+6.27%</td>
+          <td class="num win">+37.6%</td>
+          <td class="num">₩1,083,857</td>
+        </tr><tr>
+          <td>2023</td>
+          <td class="num">23</td>
+          <td class="num">78%</td>
+          <td class="num win">+5.21%</td>
+          <td class="num win">+119.9%</td>
+          <td class="num">₩1,290,999</td>
+        </tr><tr>
+          <td>2024</td>
+          <td class="num">27</td>
+          <td class="num">89%</td>
+          <td class="num win">+10.10%</td>
+          <td class="num win">+272.7%</td>
+          <td class="num">₩1,915,460</td>
+        </tr><tr>
+          <td>2025</td>
+          <td class="num">39</td>
+          <td class="num">90%</td>
+          <td class="num win">+33.24%</td>
+          <td class="num win">+1296.4%</td>
+          <td class="num">₩20,915,717</td>
+        </tr><tr>
+          <td>2026</td>
+          <td class="num">7</td>
+          <td class="num">71%</td>
+          <td class="num lose">-9.94%</td>
+          <td class="num lose">-69.6%</td>
+          <td class="num">₩821,857</td>
+        </tr></table>
+  </div>
+
+  <div class="card">
+    <h2>Monthly Log (chosen rule + outcome)</h2>
+    <table><tr><th>Month</th><th>Chosen Rule</th><th>Train N</th><th>Test N</th><th>Win%</th><th>Mean</th></tr><tr>
+          <td>2018-01</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2018-02</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2018-03</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2018-04</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2018-05</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2018-06</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2018-07</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2018-08</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2018-09</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2018-10</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2018-11</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2018-12</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2019-01</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2019-02</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2019-03</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2019-04</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2019-05</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2019-06</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2019-07</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2019-08</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2019-09</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2019-10</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2019-11</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2019-12</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2020-01</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2020-02</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2020-03</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2020-04</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2020-05</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2020-06</td>
+          <td><code>30d/$1.05-$1.20/+10%/60d</code></td>
+          <td class="num">7</td>
+          <td class="num">5</td>
+          <td class="num">80%</td>
+          <td class="num lose">-2.1%</td>
+        </tr><tr>
+          <td>2020-07</td>
+          <td><code>60d/$1.05-$1.15/+50%/60d</code></td>
+          <td class="num">5</td>
+          <td class="num">1</td>
+          <td class="num">100%</td>
+          <td class="num win">+48.0%</td>
+        </tr><tr>
+          <td>2020-08</td>
+          <td><code>60d/$1.05-$1.15/+50%/60d</code></td>
+          <td class="num">6</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2020-09</td>
+          <td><code>30d/$1.05-$1.15/+50%/60d</code></td>
+          <td class="num">5</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2020-10</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2020-11</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2020-12</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2021-01</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2021-02</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2021-03</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2021-04</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2021-05</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2021-06</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2021-07</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2021-08</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2021-09</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2021-10</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2021-11</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2021-12</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2022-01</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2022-02</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2022-03</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2022-04</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2022-05</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2022-06</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2022-07</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2022-08</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2022-09</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2022-10</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2022-11</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2022-12</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2023-01</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2023-02</td>
+          <td><code>30d/$1.05-$1.20/+20%/90d</code></td>
+          <td class="num">5</td>
+          <td class="num">1</td>
+          <td class="num">100%</td>
+          <td class="num win">+18.0%</td>
+        </tr><tr>
+          <td>2023-03</td>
+          <td><code>30d/$1.05-$1.15/+30%/90d</code></td>
+          <td class="num">5</td>
+          <td class="num">3</td>
+          <td class="num">67%</td>
+          <td class="num win">+3.5%</td>
+        </tr><tr>
+          <td>2023-04</td>
+          <td><code>30d/$1.05-$1.15/+20%/90d</code></td>
+          <td class="num">6</td>
+          <td class="num">1</td>
+          <td class="num">100%</td>
+          <td class="num win">+18.0%</td>
+        </tr><tr>
+          <td>2023-05</td>
+          <td><code>30d/$1.05-$1.15/+20%/90d</code></td>
+          <td class="num">5</td>
+          <td class="num">5</td>
+          <td class="num">80%</td>
+          <td class="num win">+3.8%</td>
+        </tr><tr>
+          <td>2023-06</td>
+          <td><code>30d/$1.05-$1.15/+15%/30d</code></td>
+          <td class="num">9</td>
+          <td class="num">3</td>
+          <td class="num">100%</td>
+          <td class="num win">+13.0%</td>
+        </tr><tr>
+          <td>2023-07</td>
+          <td><code>60d/$1.05-$1.15/+30%/60d</code></td>
+          <td class="num">6</td>
+          <td class="num">1</td>
+          <td class="num">0%</td>
+          <td class="num lose">-29.9%</td>
+        </tr><tr>
+          <td>2023-08</td>
+          <td><code>30d/$1.05-$1.15/+10%/30d</code></td>
+          <td class="num">9</td>
+          <td class="num">1</td>
+          <td class="num">100%</td>
+          <td class="num win">+8.0%</td>
+        </tr><tr>
+          <td>2023-09</td>
+          <td><code>30d/$1.05-$1.15/+10%/30d</code></td>
+          <td class="num">5</td>
+          <td class="num">3</td>
+          <td class="num">67%</td>
+          <td class="num lose">-6.1%</td>
+        </tr><tr>
+          <td>2023-10</td>
+          <td><code>30d/$1.05-$1.15/+10%/90d</code></td>
+          <td class="num">5</td>
+          <td class="num">1</td>
+          <td class="num">100%</td>
+          <td class="num win">+8.0%</td>
+        </tr><tr>
+          <td>2023-11</td>
+          <td><code>30d/$1.05-$1.15/+50%/90d</code></td>
+          <td class="num">5</td>
+          <td class="num">2</td>
+          <td class="num">50%</td>
+          <td class="num win">+15.8%</td>
+        </tr><tr>
+          <td>2023-12</td>
+          <td><code>30d/$1.05-$1.15/+10%/90d</code></td>
+          <td class="num">6</td>
+          <td class="num">2</td>
+          <td class="num">100%</td>
+          <td class="num win">+8.0%</td>
+        </tr><tr>
+          <td>2024-01</td>
+          <td><code>30d/$1.05-$1.15/+10%/30d</code></td>
+          <td class="num">5</td>
+          <td class="num">3</td>
+          <td class="num">100%</td>
+          <td class="num win">+8.0%</td>
+        </tr><tr>
+          <td>2024-02</td>
+          <td><code>45d/$1.05-$1.15/+30%/60d</code></td>
+          <td class="num">6</td>
+          <td class="num">1</td>
+          <td class="num">100%</td>
+          <td class="num win">+28.0%</td>
+        </tr><tr>
+          <td>2024-03</td>
+          <td><code>30d/$1.05-$1.15/+30%/60d</code></td>
+          <td class="num">6</td>
+          <td class="num">1</td>
+          <td class="num">100%</td>
+          <td class="num win">+28.0%</td>
+        </tr><tr>
+          <td>2024-04</td>
+          <td><code>30d/$1.05-$1.15/+30%/60d</code></td>
+          <td class="num">5</td>
+          <td class="num">3</td>
+          <td class="num">67%</td>
+          <td class="num win">+4.0%</td>
+        </tr><tr>
+          <td>2024-05</td>
+          <td><code>30d/$1.05-$1.15/+10%/60d</code></td>
+          <td class="num">5</td>
+          <td class="num">1</td>
+          <td class="num">100%</td>
+          <td class="num win">+8.0%</td>
+        </tr><tr>
+          <td>2024-06</td>
+          <td><code>30d/$1.05-$1.15/+10%/60d</code></td>
+          <td class="num">5</td>
+          <td class="num">1</td>
+          <td class="num">100%</td>
+          <td class="num win">+8.0%</td>
+        </tr><tr>
+          <td>2024-07</td>
+          <td><code>30d/$1.05-$1.15/+10%/60d</code></td>
+          <td class="num">5</td>
+          <td class="num">2</td>
+          <td class="num">100%</td>
+          <td class="num win">+8.0%</td>
+        </tr><tr>
+          <td>2024-08</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2024-09</td>
+          <td><code>30d/$1.05-$1.15/+10%/30d</code></td>
+          <td class="num">5</td>
+          <td class="num">2</td>
+          <td class="num">50%</td>
+          <td class="num lose">-7.6%</td>
+        </tr><tr>
+          <td>2024-10</td>
+          <td><code>45d/$1.05-$1.20/+10%/30d</code></td>
+          <td class="num">5</td>
+          <td class="num">7</td>
+          <td class="num">100%</td>
+          <td class="num win">+8.0%</td>
+        </tr><tr>
+          <td>2024-11</td>
+          <td><code>45d/$1.10-$1.30/+50%/60d</code></td>
+          <td class="num">5</td>
+          <td class="num">2</td>
+          <td class="num">50%</td>
+          <td class="num win">+18.0%</td>
+        </tr><tr>
+          <td>2024-12</td>
+          <td><code>45d/$1.05-$1.15/+20%/60d</code></td>
+          <td class="num">5</td>
+          <td class="num">4</td>
+          <td class="num">100%</td>
+          <td class="num win">+18.0%</td>
+        </tr><tr>
+          <td>2025-01</td>
+          <td><code>45d/$1.05-$1.15/+20%/60d</code></td>
+          <td class="num">9</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2025-02</td>
+          <td><code>45d/$1.05-$1.20/+20%/60d</code></td>
+          <td class="num">6</td>
+          <td class="num">4</td>
+          <td class="num">100%</td>
+          <td class="num win">+18.0%</td>
+        </tr><tr>
+          <td>2025-03</td>
+          <td><code>45d/$1.05-$1.15/+50%/60d</code></td>
+          <td class="num">7</td>
+          <td class="num">1</td>
+          <td class="num">100%</td>
+          <td class="num win">+48.0%</td>
+        </tr><tr>
+          <td>2025-04</td>
+          <td><code>30d/$1.05-$1.20/+50%/60d</code></td>
+          <td class="num">6</td>
+          <td class="num">4</td>
+          <td class="num">75%</td>
+          <td class="num win">+25.9%</td>
+        </tr><tr>
+          <td>2025-05</td>
+          <td><code>30d/$1.05-$1.15/+50%/90d</code></td>
+          <td class="num">8</td>
+          <td class="num">4</td>
+          <td class="num">100%</td>
+          <td class="num win">+48.0%</td>
+        </tr><tr>
+          <td>2025-06</td>
+          <td><code>30d/$1.05-$1.15/+50%/90d</code></td>
+          <td class="num">9</td>
+          <td class="num">3</td>
+          <td class="num">100%</td>
+          <td class="num win">+48.0%</td>
+        </tr><tr>
+          <td>2025-07</td>
+          <td><code>30d/$1.05-$1.15/+50%/90d</code></td>
+          <td class="num">11</td>
+          <td class="num">6</td>
+          <td class="num">83%</td>
+          <td class="num win">+35.6%</td>
+        </tr><tr>
+          <td>2025-08</td>
+          <td><code>30d/$1.05-$1.15/+50%/90d</code></td>
+          <td class="num">13</td>
+          <td class="num">9</td>
+          <td class="num">100%</td>
+          <td class="num win">+48.0%</td>
+        </tr><tr>
+          <td>2025-09</td>
+          <td><code>30d/$1.05-$1.15/+50%/90d</code></td>
+          <td class="num">18</td>
+          <td class="num">4</td>
+          <td class="num">50%</td>
+          <td class="num win">+2.3%</td>
+        </tr><tr>
+          <td>2025-10</td>
+          <td><code>45d/$1.20-$1.50/+30%/60d</code></td>
+          <td class="num">6</td>
+          <td class="num">1</td>
+          <td class="num">100%</td>
+          <td class="num win">+28.0%</td>
+        </tr><tr>
+          <td>2025-11</td>
+          <td><code>60d/$1.05-$1.15/+30%/60d</code></td>
+          <td class="num">12</td>
+          <td class="num">1</td>
+          <td class="num">100%</td>
+          <td class="num win">+28.0%</td>
+        </tr><tr>
+          <td>2025-12</td>
+          <td><code>30d/$1.20-$1.50/+15%/90d</code></td>
+          <td class="num">5</td>
+          <td class="num">2</td>
+          <td class="num">100%</td>
+          <td class="num win">+13.0%</td>
+        </tr><tr>
+          <td>2026-01</td>
+          <td><code>30d/$1.05-$1.15/+10%/30d</code></td>
+          <td class="num">8</td>
+          <td class="num">4</td>
+          <td class="num">50%</td>
+          <td class="num lose">-23.4%</td>
+        </tr><tr>
+          <td>2026-02</td>
+          <td><code>60d/$1.05-$1.15/+30%/90d</code></td>
+          <td class="num">5</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2026-03</td>
+          <td><code>30d/$1.20-$1.50/+15%/30d</code></td>
+          <td class="num">8</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2026-04</td>
+          <td><code>30d/$1.20-$1.50/+15%/30d</code></td>
+          <td class="num">6</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2026-05</td>
+          <td><code>30d/$1.10-$1.30/+10%/30d</code></td>
+          <td class="num">6</td>
+          <td class="num">3</td>
+          <td class="num">100%</td>
+          <td class="num win">+8.0%</td>
+        </tr><tr>
+          <td>2026-06</td>
+          <td><code>60d/$1.05-$1.15/+10%/30d</code></td>
+          <td class="num">9</td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num ">—</td>
+        </tr></table>
+  </div>
+
+  <footer>
+    Walk-forward: each month, prior 3 months used for grid search → applied to next month.
+    No look-ahead. Slippage 2% per trade. Common stocks only (warrants excluded).
+    Stooq archive — yfinance not used.
+  </footer>
+</div></body></html>
