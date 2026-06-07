@@ -7,7 +7,7 @@
 
 ---
 
-## 🎯 What It Does
+## What It Does
 
 1. **매 평일** GitHub Action이 자동 실행:
    - yfinance에서 NASDAQ 페니스탁 일봉 fetch (incremental)
@@ -27,7 +27,7 @@
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ![Architecture](docs/assets/architecture.svg)
 
@@ -61,7 +61,7 @@
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Live system 보기 (아무 설정 없이)
 
@@ -105,18 +105,22 @@ python scripts/live/daily_report.py --as-of 2025-05-08 --rule-file config/rule_2
 
 ---
 
-## 📂 Repository Structure
+## Repository Structure
 
 ```
 pennysniper-validation/
 ├── README.md                          ← 본 파일 (운영 시스템)
 ├── docs/
-│   ├── validation_journey.md          ← 23개 가설 검증 일지 ⭐
+│   ├── validation_journey.md          ← 23개 가설 검증 일지
 │   ├── findings.md                    ← 가설별 정밀 결과
 │   ├── rolling_adaptive_findings.md   ← 적응형 walk-forward 발견
 │   ├── optimal_rule_2026_watchlist.md ← 룰 최적화 과정
 │   ├── stooq_full_universe_findings.md ← Selection bias 검증
 │   ├── 2026_signals_watchlist.md      ← Warrant 함정 발견
+│   ├── scripts_overview.md            ← 운영 스크립트 묶음 (개발자용)
+│   ├── daily_report_guide.md          ← daily_report.py 상세 가이드
+│   ├── assets/
+│   │   └── architecture.svg
 │   └── PRD_v3.0.md                    ← 원본 PRD (출발점, archive)
 ├── scripts/
 │   ├── live/                          ← 운영 스크립트
@@ -153,7 +157,7 @@ pennysniper-validation/
 
 ---
 
-## 📊 Performance (Backtest)
+## Performance (Backtest)
 
 **핵심 룰 (현재 운영 중인 monthly retrain)**:
 - OOS 거래: 70 trades (38 monthly windows, 2023.04 ~ 2026.05)
@@ -171,17 +175,17 @@ pennysniper-validation/
 | 방법 | OOS APY | ₩1M → 결과 |
 |---|---|---|
 | Quarterly (3mo→3mo) | +1,768% | ₩18.7M |
-| **Monthly (3mo→1mo)** ⭐ | **+2,749%** | **₩28.5M** |
+| **Monthly (3mo→1mo)** | **+2,749%** | **₩28.5M** |
 | Daily (60d→1d) | +3,133% | ₩32.3M |
 
-> ⚠️ **현실 기대치**: 슬리피지 (실제 5-10%) + 한국 양도세 22% + 시장 효율화 반영 시
+> **현실 기대치**: 슬리피지 (실제 5-10%) + 한국 양도세 22% + 시장 효율화 반영 시
 > 보수적으로 연 +30~50% 수준이 현실적입니다. Paper trading 6개월 이상 권장.
 
 자세한 검증 일지: **[docs/validation_journey.md](docs/validation_journey.md)**
 
 ---
 
-## 🤖 GitHub Actions
+## GitHub Actions
 
 ### Daily scan (`daily_breakout_scan.yml`)
 - 일정: **Tue-Sat 06:00 UTC** (한국 15:00, 미국 마감 후)
@@ -207,7 +211,7 @@ gh workflow run daily_breakout_scan.yml \
 
 ---
 
-## 📈 Live Data Sources
+## Live Data Sources
 
 | Source | Used for |
 |---|---|
@@ -220,7 +224,7 @@ gh workflow run daily_breakout_scan.yml \
 
 ---
 
-## 🚦 Risk Controls (운영 권장)
+## Risk Controls (운영 권장)
 
 ```python
 # 권장 자본 운용
@@ -240,7 +244,7 @@ WARRANT_EXCLUSION = True       # auto-applied
 
 ---
 
-## 🧪 Reproducing Past Reports
+## Reproducing Past Reports
 
 May 2025, May 2026, June 2026 리포트 모두 재생성 가능:
 
@@ -263,7 +267,7 @@ python scripts/live/june_2026_summary.py
 
 ---
 
-## 🎓 Why This Project Exists
+## Why This Project Exists
 
 원래 PRD v3.0은 **KNN + PPO RL 기반 페니스탁 day-trading**이었습니다.
 
@@ -277,11 +281,11 @@ python scripts/live/june_2026_summary.py
 
 ---
 
-## 📚 More Documentation
+## More Documentation
 
 ### For developers / 코드 수정자
-- **[scripts_overview.md](docs/scripts_overview.md)** — 모든 스크립트 한눈에 ⭐
-- **[daily_report_guide.md](docs/daily_report_guide.md)** — `daily_report.py` 내부 구조 (수정 가이드) ⭐
+- **[scripts_overview.md](docs/scripts_overview.md)** — 모든 스크립트 한눈에
+- **[daily_report_guide.md](docs/daily_report_guide.md)** — `daily_report.py` 내부 구조 (수정 가이드)
 - [scripts/live/README.md](scripts/live/README.md) — 운영 스크립트 사용법 (cron 등)
 
 ### For analysts / 검증 결과 보는 사람
@@ -291,7 +295,7 @@ python scripts/live/june_2026_summary.py
 
 ---
 
-## ⚠️ Disclaimer
+## Disclaimer
 
 - 본 시스템은 **개인 학습/연구용**입니다
 - 투자 권유 아님
@@ -302,10 +306,10 @@ python scripts/live/june_2026_summary.py
 
 ---
 
-## 📝 License
+## License
 
 MIT — 자유롭게 사용/포크 가능
 
-## 🤝 Contributing
+## Contributing
 
 발견한 버그나 개선 아이디어는 issue로 남겨주세요.
