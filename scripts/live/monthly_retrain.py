@@ -1,11 +1,20 @@
 """
-Monthly rule retraining.
+Monthly rule retraining (Option A — wide grid + strict filter).
 
 Re-optimizes the breakout rule using the most recent 3-month period
 ending at the prior month boundary, then applies to the current month.
 
-Backtest finding: monthly retrain produces ~13% higher cumulative return
-than quarterly retrain (₩28.5M vs ₩18.7M from ₩1M, 25% allocation).
+Selection rule (Option A, validated on 8.5y backtest):
+  - candidate must satisfy: train win_rate ≥ 80% AND mean ≥ 0 AND N ≥ 5
+  - tiebreaker: maximize  mean_return × sqrt(N)
+  - if no candidate passes → no rule written (system trades nothing this month)
+
+Wide grid:
+  - cons_days:   30 / 45 / 60
+  - sub_levels:  $1.0 / $1.5 / $2.0  (consolidation top — auto-adapts to market level)
+  - entry_ranges: 10 bands from $1.05 to $5.00
+  - tp_ratio:    1.10 / 1.15 / 1.20 / 1.30 / 1.50
+  - hold:        30 / 60 / 90
 
 Reads:  data/daily_cache/{TICKER}.csv  (from fetch_universe.py)
 Writes: config/current_rule.json
@@ -25,12 +34,27 @@ CONFIG.parent.mkdir(exist_ok=True)
 SLIP = 0.02
 MIN_AVG_VOL = 10_000
 
+# Selection filter
+MIN_TRAIN_N = 5
+MIN_WINRATE = 0.80
+MIN_MEAN = 0.0
+
 CONS_DAYS_LIST = [30, 45, 60]
+SUB_LEVELS = [1.0, 1.5, 2.0]   # consolidation top
 ENTRY_RANGES = [
+    # low zone
     (1.05, 1.15, "$1.05-$1.15"),
     (1.05, 1.20, "$1.05-$1.20"),
     (1.10, 1.30, "$1.10-$1.30"),
     (1.20, 1.50, "$1.20-$1.50"),
+    # mid zone (mania-friendly)
+    (1.50, 1.80, "$1.50-$1.80"),
+    (1.50, 2.00, "$1.50-$2.00"),
+    (2.00, 2.50, "$2.00-$2.50"),
+    (2.00, 3.00, "$2.00-$3.00"),
+    # high zone
+    (3.00, 4.00, "$3.00-$4.00"),
+    (3.00, 5.00, "$3.00-$5.00"),
 ]
 TP_LEVELS = [1.10, 1.15, 1.20, 1.30, 1.50]
 HOLDS = [30, 60, 90]
@@ -46,7 +70,14 @@ def parse_csv(path):
     return df.sort_values("Date").reset_index(drop=True)
 
 
-def find_events(df, sym, cons_days, entry_lo, entry_hi):
+def find_events(df, sym, cons_days, sub_level, entry_lo, entry_hi):
+    """
+    Find events where:
+      - prior cons_days closes < sub_level (consolidation under top)
+      - today close in [entry_lo, entry_hi)
+      - prev close < entry_lo (= today is the first breakout above entry_lo)
+      - cons-period avg volume >= MIN_AVG_VOL
+    """
     if len(df) < cons_days + 5:
         return []
     c = df["Close"].values
@@ -57,7 +88,7 @@ def find_events(df, sym, cons_days, entry_lo, entry_hi):
     rows = []
     for i in range(cons_days, len(c) - 1):
         prior = c[i - cons_days : i]
-        if not (prior < 1.0).all() or not (prior > 0).all():
+        if not (prior < sub_level).all() or not (prior > 0).all():
             continue
         if v[i - cons_days : i].mean() < MIN_AVG_VOL:
             continue
@@ -133,59 +164,87 @@ def main():
         print("ERROR: no cached price data. Run fetch_universe.py first.")
         sys.exit(1)
 
-    # Build events
+    # Build events for every (cons, sub, entry_range) combo
     events_by_key = {}
     for f in csv_files:
         sym = f.stem
         df = parse_csv(f)
         if df is None:
             continue
+        # quick bail-out: only stocks with ANY traded sub-$5 history
         c = df["Close"].values
-        if not ((c < 1.0).any() and (c >= 1.05).any()):
+        if not (c < 5.0).any():
             continue
         for cd in CONS_DAYS_LIST:
-            for lo, hi, label in ENTRY_RANGES:
-                events = find_events(df, sym, cd, lo, hi)
-                if events:
-                    events_by_key.setdefault((cd, label, lo, hi), []).extend(events)
+            for sub in SUB_LEVELS:
+                for lo, hi, label in ENTRY_RANGES:
+                    if lo < sub:        # entry must be above consolidation top
+                        continue
+                    if hi > 5.0:
+                        continue
+                    events = find_events(df, sym, cd, sub, lo, hi)
+                    if events:
+                        events_by_key.setdefault((cd, sub, label, lo, hi), []).extend(events)
 
-    # Grid search on training window
-    grid = []
-    for (cd, label, lo, hi), all_events in events_by_key.items():
+    # Strict-filter grid search on training window
+    candidates = []
+    for (cd, sub, label, lo, hi), all_events in events_by_key.items():
         train_evs = [e for e in all_events if train_start <= e["date"] < train_end]
-        if len(train_evs) < 3:
+        if len(train_evs) < MIN_TRAIN_N:
             continue
         for tp in TP_LEVELS:
             for hold in HOLDS:
                 rets = simulate(train_evs, tp, hold)
-                if len(rets) < 3:
+                if len(rets) < MIN_TRAIN_N:
                     continue
                 wr = (rets > 0).mean()
+                mean_ret = float(rets.mean())
+                # STRICT FILTER (Option A)
+                if wr < MIN_WINRATE:
+                    continue
+                if mean_ret < MIN_MEAN:
+                    continue
                 p10 = float(np.percentile(rets, 10))
-                score = wr * (1 + max(p10, -1))
-                grid.append({
-                    "cons_d": cd, "entry_range": label,
+                score = mean_ret * np.sqrt(len(rets))
+                candidates.append({
+                    "cons_d": cd, "sub_level": sub, "entry_range": label,
                     "entry_lo": lo, "entry_hi": hi,
                     "tp_ratio": tp, "hold": hold,
                     "n": len(rets), "win_rate": wr,
-                    "mean": float(rets.mean()), "p10": p10, "score": score,
+                    "mean": mean_ret, "p10": p10, "score": score,
                 })
 
-    if not grid:
-        print("ERROR: insufficient training data.")
-        sys.exit(1)
+    if not candidates:
+        # No combo passes the strict filter → don't write a rule.
+        # Live system will skip trading until next month's retrain finds a passing combo.
+        print("\nNo qualifying candidate (win_rate ≥ 80% AND mean ≥ 0 AND N ≥ 5).")
+        print("This month: SKIP trading (capital preservation).")
+        rule = {
+            "skip_trading": True,
+            "reason": "no candidate passed strict filter",
+            "valid_from": train_end.strftime("%Y-%m-%d"),
+            "valid_until": valid_until.strftime("%Y-%m-%d"),
+            "trained_on_period": f"{train_start.date()}_{train_end.date()}",
+            "generated_at": pd.Timestamp.now().isoformat(),
+        }
+        out_path.parent.mkdir(exist_ok=True)
+        with open(out_path, "w") as f:
+            json.dump(rule, f, indent=2)
+        print(f"✓ Saved skip-marker to {out_path}")
+        return
 
-    g = pd.DataFrame(grid).nlargest(10, "score")
-    print("\nTop 10 candidates (by win_rate × (1 + p10)):")
-    print(f"{'cons':>4} {'entry':>14} {'TP':>6} {'hold':>5} {'N':>4} {'win%':>6} {'p10':>7} {'score':>6}")
+    g = pd.DataFrame(candidates).nlargest(10, "score")
+    print(f"\nTop 10 candidates (filter passed: win≥{MIN_WINRATE*100:.0f}%, mean≥{MIN_MEAN*100:.0f}%, N≥{MIN_TRAIN_N}):")
+    print(f"{'cons':>4} {'sub':>5} {'entry':>14} {'TP':>6} {'hold':>5} {'N':>4} {'win%':>6} {'mean':>7} {'p10':>7}")
     for _, r in g.iterrows():
         tp_s = "+%.0f%%" % ((r["tp_ratio"] - 1) * 100)
-        print(f"{int(r['cons_d']):>3}d {r['entry_range']:>14} {tp_s:>6} {int(r['hold']):>3}d "
-              f"{int(r['n']):>4} {r['win_rate']:>5.1%} {r['p10']:>+6.1%} {r['score']:>5.3f}")
+        print(f"{int(r['cons_d']):>3}d ${r['sub_level']:>3.1f} {r['entry_range']:>14} {tp_s:>6} {int(r['hold']):>3}d "
+              f"{int(r['n']):>4} {r['win_rate']:>5.1%} {r['mean']*100:>+6.1f}% {r['p10']:>+6.1%}")
 
     best = g.iloc[0]
     rule = {
         "cons_d": int(best["cons_d"]),
+        "sub_level": float(best["sub_level"]),
         "entry_lo": float(best["entry_lo"]),
         "entry_hi": float(best["entry_hi"]),
         "tp_ratio": float(best["tp_ratio"]),
@@ -204,7 +263,8 @@ def main():
     with open(out_path, "w") as f:
         json.dump(rule, f, indent=2)
     print(f"\n✓ Saved {out_path}")
-    print(f"\nNew rule: cons {rule['cons_d']}d / entry [${rule['entry_lo']:.2f}, ${rule['entry_hi']:.2f}) / "
+    print(f"\nNew rule: cons {rule['cons_d']}d / sub ${rule['sub_level']:.1f} / "
+          f"entry [${rule['entry_lo']:.2f}, ${rule['entry_hi']:.2f}) / "
           f"TP +{(rule['tp_ratio']-1)*100:.0f}% / hold {rule['hold_d']}d")
 
 

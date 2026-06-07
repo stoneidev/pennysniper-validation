@@ -123,9 +123,13 @@ def parse_csv(path):
 
 
 def detect_signals(rule, as_of):
+    # Skip-trading marker (Option A: no candidate passed strict filter)
+    if rule.get("skip_trading"):
+        return []
     cons_d = rule["cons_d"]
     entry_lo = rule["entry_lo"]
     entry_hi = rule["entry_hi"]
+    sub_level = rule.get("sub_level", 1.0)  # consolidation top (default 1.0 for backward compat)
 
     csv_files = sorted(CACHE.glob("*.csv"))
     csv_files = [f for f in csv_files if not f.name.startswith("_")]
@@ -156,7 +160,7 @@ def detect_signals(rule, as_of):
         prior = df["Close"].values[-(cons_d + 1):-1]
         if len(prior) < cons_d:
             continue
-        if not (prior < 1.0).all() or not (prior > 0).all():
+        if not (prior < sub_level).all() or not (prior > 0).all():
             continue
         if df["Volume"].values[-(cons_d + 1):-1].mean() < MIN_AVG_VOL:
             continue

@@ -3,8 +3,8 @@
 > **이 문서는 다음 세션(Claude 또는 다른 협업자)에서 작업을 이어가기 위한
 > 전체 컨텍스트 스냅샷입니다.** 가장 먼저 이걸 읽고 시작하세요.
 
-**Last updated:** 2026-06-07 (KST)
-**Last commit:** `b242b81 — Add Telegram notifications (Option B)` by KIM JONG IL
+**Last updated:** 2026-06-08 (KST)
+**Last commit:** Option A applied — wide-grid rule with strict filter
 
 ---
 
@@ -43,26 +43,52 @@ HTML 리포트를 GitHub Pages에 publish하며, Telegram으로 알림까지 보
 
 ---
 
-## 3. 현재 운영 중인 룰
+## 3. 현재 운영 중인 룰 (Option A)
 
-`config/current_rule.json` (자동 갱신, 매월 1일):
+2026-06-08 시점에 옵션 A (wide grid + strict filter)로 전환됨.
+
+`config/current_rule.json`:
 
 ```json
 {
-  "cons_d": 60,
-  "entry_lo": 1.20,
-  "entry_hi": 1.50,
-  "tp_ratio": 1.50,
-  "hold_d": 30,
+  "cons_d": 30,
+  "sub_level": 1.5,
+  "entry_lo": 2.00,
+  "entry_hi": 3.00,
+  "tp_ratio": 1.30,
+  "hold_d": 60,
   "valid_until": "2026-06-30",
   "trained_on_period": "2026-03-01_2026-06-01",
-  "train_n": 3,
-  "train_win_rate": 1.0,
-  "train_mean_return": 0.48
+  "train_n": 10,
+  "train_win_rate": 0.80,
+  "train_mean_return": 0.134
 }
 ```
 
-**의미:** 직전 60 trading days 종가 모두 < $1.00 → 오늘 종가 $1.20~$1.50 사이 첫 돌파 → 다음날 시초가 매수 → +50% 도달 시 TP 청산 또는 30일 후 강제 청산.
+**의미:** 직전 30 trading days 종가 모두 < $1.50 → 오늘 종가 $2.00~$3.00 사이 첫 돌파 → 다음날 시초가 매수 → +30% 도달 시 TP 청산 또는 60일 후 강제 청산.
+
+### Option A의 변경 사항 (vs 이전 narrow rule)
+
+`scripts/live/monthly_retrain.py` 변경:
+- ENTRY_RANGES: 4개 → **10개** ($1.05~$5.00 전체)
+- SUB_LEVELS 추가: $1.0 / $1.5 / $2.0 (consolidation top)
+- 선택 필터: train win_rate ≥ 80% AND train mean ≥ 0 AND N ≥ 5
+- Tiebreaker: maximize  mean × √N
+- 통과 후보 없으면 → "skip_trading" 마커 → 그달 거래 안 함
+
+`scripts/live/daily_report.py` 변경:
+- `sub_level` 필드 사용 (없으면 기본값 1.0)
+- "skip_trading" 마커 인식 → 시그널 0건
+
+### 4-month walk-forward OOS 결과 (2026.02~05)
+₩1,000,000 (25% allocation) → **₩1,718,979 (+71.9%)**
+- 2월: +12% (1 closed)
+- 3월: +0.4% (3 closed, 1 loss)
+- 4월: +7% (1 closed)
+- 5월: +43% (18 closed, 100% TP)
+
+### 8.5y backtest (Stooq 2018~2026)
+좁은 그리드 ₩46M vs 옵션 A ₩214M (4.6배)
 
 **다음 재학습:** 2026-07-01 (자동, GH Action에서 직전 3개월 = 2026.04~06 데이터로 그리드 서치)
 
