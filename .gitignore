@@ -13,6 +13,9 @@ xrp_cache/
 polygon_minute_cache/
 price_cache/
 
+# data/daily_cache is intentionally tracked for GH Action use
+# But keep individual raw caches lightweight
+
 # OS
 .DS_Store
 Thumbs.db

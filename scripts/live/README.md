@@ -1,93 +1,121 @@
-# Live Trading Automation
+# Live Daily Breakout Scanner
 
-Daily scanner + quarterly rule retrainer.
+GitHub Actions로 매일 자동 스캔 → 시그널 발견 시 markdown 리포트 자동 생성 → repo에 commit.
 
 ## Architecture
 
 ```
-┌─────────────────────────┐
-│ quarterly_retrain.py    │  Every quarter (Jan/Apr/Jul/Oct 1st)
-│ - Trains on prior 3mo   │  → writes config/current_rule.json
-│ - Picks best by score   │
-└────────┬────────────────┘
-         │
+┌──────────────────────────────────┐
+│ GitHub Actions (cron)            │  Daily 06:00 UTC, Tue-Sat
+│ .github/workflows/daily_breakout │
+│   _scan.yml                      │
+└────────┬─────────────────────────┘
          ↓
-┌─────────────────────────┐
-│ config/current_rule.json│  Current quarter's rule
-│ {                        │
-│   "cons_d": 30,          │
-│   "entry_lo": 1.20,      │
-│   "entry_hi": 1.50,      │
-│   "tp_ratio": 1.15,      │
-│   "hold_d": 30,          │
-│   "valid_until": "..."   │
-│ }                        │
-└────────┬────────────────┘
-         │
+┌──────────────────────────────────┐
+│ 1. fetch_universe.py             │  yfinance로 NASDAQ 일봉 fetch
+│    → data/daily_cache/{TICKER}.csv │
+└────────┬─────────────────────────┘
          ↓
-┌─────────────────────────┐
-│ daily_scanner.py        │  Every weekday after market close
-│ - Reads current rule    │  → appends to logs/signals_YYYY-MM.csv
-│ - Scans Stooq universe  │  → prints alert for new signals
-└─────────────────────────┘
+┌──────────────────────────────────┐
+│ 2. quarterly_retrain.py          │  분기 1일에만 실행
+│    (if 1st of Jan/Apr/Jul/Oct)   │  → config/current_rule.json
+└────────┬─────────────────────────┘
+         ↓
+┌──────────────────────────────────┐
+│ 3. daily_report.py               │  현재 룰로 시그널 탐지
+│    → reports/YYYY-MM-DD.md       │  → markdown 리포트 작성
+└────────┬─────────────────────────┘
+         ↓
+┌──────────────────────────────────┐
+│ git commit + push                │  자동 commit (bot 명의)
+└──────────────────────────────────┘
 ```
 
-## Setup
+## Files
+
+| File | Purpose |
+|---|---|
+| `fetch_universe.py` | NASDAQ symbol list + yfinance daily bars |
+| `quarterly_retrain.py` | Re-optimize rule using prior 3 months |
+| `daily_report.py` | Detect signals & write markdown report |
+| `import_stooq_cache.py` | (one-time) bootstrap from local Stooq archive |
+| `generate_may_reports.py` | Backfill May 2025 reports |
+| `may_summary.py` | Aggregate May 2025 outcomes |
+
+## Manual usage
 
 ```bash
-# 1. Initial rule (run once)
-python scripts/live/quarterly_retrain.py
+# 1. Fetch universe (slow first time, ~10-30 min)
+python scripts/live/fetch_universe.py
 
-# 2. Verify config created
-cat config/current_rule.json
+# 2. Train quarterly rule (or override with --as-of for backtest)
+python scripts/live/quarterly_retrain.py --as-of 2025-04-15 --out config/rule_2025_q2.json
 
-# 3. Daily scan (manual test)
-python scripts/live/daily_scanner.py
+# 3. Generate one daily report
+python scripts/live/daily_report.py --as-of 2025-05-08 --rule-file config/rule_2025_q2.json
+
+# 4. Bulk-generate historical reports (e.g., May 2025)
+python scripts/live/generate_may_reports.py
+python scripts/live/may_summary.py
 ```
 
-## Cron jobs (macOS / Linux)
+## GitHub Actions setup
 
-```cron
-# Quarterly retrain (1st of Jan/Apr/Jul/Oct, 6am)
-0 6 1 1,4,7,10 * cd /Users/stoni/Downloads/pennysniper_validation && /Users/stoni/Downloads/pennysniper_validation/venv/bin/python scripts/live/quarterly_retrain.py >> logs/retrain.log 2>&1
+The workflow at `.github/workflows/daily_breakout_scan.yml`:
 
-# Daily scanner (weekdays 5pm KST = ~3am UTC, after US close)
-0 17 * * 1-5 cd /Users/stoni/Downloads/pennysniper_validation && /Users/stoni/Downloads/pennysniper_validation/venv/bin/python scripts/live/daily_scanner.py >> logs/scan.log 2>&1
+1. Runs daily 06:00 UTC (Tue-Sat — covers Mon-Fri US trading days)
+2. Fetches latest yfinance data into `data/daily_cache/`
+3. On the 1st of each quarter, retrains the rule
+4. Detects signals using current rule, writes report
+5. Commits any new reports/config to the repo
+
+### Permissions
+
+Workflow needs `contents: write` to commit reports back. Already configured.
+
+### Manual trigger
+
+```bash
+gh workflow run daily_breakout_scan.yml \
+  -f as_of_date=2025-05-15  # optional: backtest a specific date
 ```
 
-## Stooq data refresh
+### Time / cost
 
-The scripts assume Stooq data is in:
-```
-/Users/stoni/Downloads/data/daily/us/nasdaq stocks/{1,2,3}/*.txt
-```
+- **fetch_universe**: ~10-20 min (4,000 tickers × yfinance rate limit)
+- **quarterly_retrain**: ~30 sec
+- **daily_report**: ~5 sec
+- **Total daily run**: ~15-25 min within free GH Actions tier (2,000 min/month)
 
-Refresh weekly by re-downloading from https://stooq.com/db/h/
+## Stooq vs yfinance trade-off
 
-## Trade execution
+This live system uses **yfinance** because:
+- Works in any environment (Stooq requires local download)
+- Auto split-adjusted prices
+- Free tier sufficient for daily scans
 
-Currently the scanner only **detects and alerts**. To automate trade execution,
-add an integration with your broker API (Alpaca, IBKR, Tastytrade, etc.)
-that:
+Trade-off:
+- yfinance is rate-limited (~100 tickers/min)
+- Less reliable than Stooq for thin penny stocks
+- Some tickers may be missing or have data gaps
 
-1. Reads `logs/signals_YYYY-MM.csv` for new entries
-2. Places a market BUY order at next-day open
-3. Places a limit SELL order at TP price (= entry × tp_ratio)
-4. Sets a calendar reminder to force-sell after `hold_d` days if TP not hit
+For larger backtests, use the local Stooq pipeline (see `scripts/breakout/`).
 
-## Risk controls (recommended)
+## Risk controls (recommended for live trading)
 
-- Max position size: 25% of cash per trade (or 10% for safer)
-- Max simultaneous positions: 4
-- Daily loss limit: −5% of total NAV → halt for the day
-- Monthly review: stop if 3 consecutive months net negative
-- Hard limit: 90 days holding + close at any cost
+- **Position size**: 25% of cash per signal (max 4 simultaneous)
+- **Daily loss limit**: -5% of NAV → halt for the day
+- **Monthly review**: stop if 3 consecutive months net negative
+- **Hard limit**: respect `hold_d` from rule, force-close at expiry
+- **Warrant/right exclusion**: handled in `fetch_universe.py` (W/R/U/Z suffix)
 
-## Backtest reproducibility
+## Reproducing past reports
 
-The exact same logic is in:
-- `scripts/breakout/breakout_15_rolling_3month.py` (historical aggregate)
-- `scripts/breakout/breakout_16_2026q2_forward.py` (latest window)
+The May 2025 reports (`reports/2025-05-*.md`) used:
+- **Rule**: `config/rule_2025_q2.json` (trained on 2025.01-03)
+- **Universe**: bootstrapped from Stooq via `import_stooq_cache.py`
 
-Re-run those after each quarter to validate the live system matches the
-historical simulation.
+Summary at `reports/_may_2025_summary.md`:
+- 4 signals (CTMX, JBDI, NBP, ONDS)
+- 3 hit TP +50%, 1 hit hold-expiry loss
+- ₩1M with 25% allocation → ₩1.37M (+37%)

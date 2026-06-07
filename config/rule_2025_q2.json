@@ -1,0 +1,15 @@
+{
+  "cons_d": 30,
+  "entry_lo": 1.05,
+  "entry_hi": 1.2,
+  "tp_ratio": 1.5,
+  "hold_d": 60,
+  "valid_from": "2025-04-01",
+  "valid_until": "2025-06-30",
+  "trained_on_period": "2025-01-01_2025-04-01",
+  "train_n": 6,
+  "train_win_rate": 1.0,
+  "train_mean_return": 0.48,
+  "train_p10": 0.48,
+  "generated_at": "2026-06-07T13:40:33.011908"
+}
