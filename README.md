@@ -29,44 +29,10 @@
 
 ## 🏗️ Architecture
 
-```
-                       ┌─────────────────────────┐
-                       │   GitHub Actions        │
-                       │   (cron + manual)       │
-                       └────────────┬────────────┘
-                                    │
-              ┌─────────────────────┼─────────────────────┐
-              │                     │                     │
-       Mon-Fri 06:00 UTC     1st of every month     Sat 06:00 UTC
-              │                     │                     │
-              ▼                     ▼                     ▼
-   ┌─────────────────┐    ┌─────────────────┐   ┌─────────────────┐
-   │ daily_breakout_ │    │ monthly_retrain │   │ weekly_report   │
-   │ scan.yml        │    │ (auto-trigger   │   │ .yml            │
-   │                 │    │  on day 1)      │   │                 │
-   └────────┬────────┘    └────────┬────────┘   └────────┬────────┘
-            │                      │                     │
-            ▼                      ▼                     ▼
-  ┌──────────────────┐   ┌──────────────────┐  ┌──────────────────┐
-  │ fetch_universe   │   │ monthly_retrain  │  │ weekly_report    │
-  │   .py            │   │   .py            │  │   .py            │
-  │ (incremental,    │   │ (3mo train       │  │ (aggregate week, │
-  │  ~3min)          │   │  → 1mo apply)    │  │  insights, HTML) │
-  └────────┬─────────┘   └────────┬─────────┘  └────────┬─────────┘
-           │                      │                     │
-           └──────────────────────┼─────────────────────┘
-                                  ▼
-                       ┌──────────────────────┐
-                       │ data/daily_cache/    │
-                       │ config/current_rule  │
-                       │ reports/*.html       │
-                       └──────────┬───────────┘
-                                  ▼
-                       ┌──────────────────────┐
-                       │ git commit + push    │
-                       │ GitHub Pages deploy  │
-                       └──────────────────────┘
-```
+![Architecture](docs/assets/architecture.svg)
+
+> 4-layer pipeline: GitHub Actions cron triggers → live scripts → data stores → publishing.
+> 자세한 설명은 [docs/scripts_overview.md](docs/scripts_overview.md) 참조.
 
 ### Active Rule (auto-updated monthly)
 

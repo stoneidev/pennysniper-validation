@@ -1,0 +1,180 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 820" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif">
+  <defs>
+    <!-- Arrowheads -->
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5b6275"/>
+    </marker>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#4f8cff"/>
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1fbf75"/>
+    </marker>
+
+    <!-- Card / box style -->
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1100" height="820" fill="#0f1115"/>
+
+  <!-- Title -->
+  <text x="40" y="44" fill="#e8e8ea" font-size="22" font-weight="700">PennySniper — System Architecture</text>
+  <text x="40" y="68" fill="#8b93a7" font-size="13">GitHub Actions cron → fetch → retrain → scan → publish</text>
+
+  <!-- ================= Layer 1: Triggers (cron) ================= -->
+  <text x="40" y="108" fill="#8b93a7" font-size="11" font-weight="600" letter-spacing="1.5">① TRIGGERS · GITHUB ACTIONS CRON</text>
+
+  <!-- Daily trigger -->
+  <g filter="url(#shadow)">
+    <rect x="40" y="120" width="290" height="78" rx="10" fill="#181b22" stroke="#2a2f3a"/>
+    <text x="60" y="146" fill="#4f8cff" font-size="13" font-weight="700">Daily</text>
+    <text x="60" y="166" fill="#e8e8ea" font-size="12">Tue–Sat 06:00 UTC (KST 15:00)</text>
+    <text x="60" y="184" fill="#8b93a7" font-size="11">.github/workflows/daily_breakout_scan.yml</text>
+  </g>
+
+  <!-- Monthly (embedded in daily) -->
+  <g filter="url(#shadow)">
+    <rect x="350" y="120" width="370" height="78" rx="10" fill="#181b22" stroke="#2a2f3a"/>
+    <text x="370" y="146" fill="#f5b342" font-size="13" font-weight="700">Monthly retrain</text>
+    <text x="370" y="166" fill="#e8e8ea" font-size="12">1st of every month OR rule expired</text>
+    <text x="370" y="184" fill="#8b93a7" font-size="11">embedded inside daily workflow (conditional step)</text>
+  </g>
+
+  <!-- Weekly trigger -->
+  <g filter="url(#shadow)">
+    <rect x="740" y="120" width="320" height="78" rx="10" fill="#181b22" stroke="#2a2f3a"/>
+    <text x="760" y="146" fill="#1fbf75" font-size="13" font-weight="700">Weekly</text>
+    <text x="760" y="166" fill="#e8e8ea" font-size="12">Saturday 07:00 UTC (KST 16:00)</text>
+    <text x="760" y="184" fill="#8b93a7" font-size="11">.github/workflows/weekly_report.yml</text>
+  </g>
+
+  <!-- ================= Layer 2: Live Scripts ================= -->
+  <text x="40" y="245" fill="#8b93a7" font-size="11" font-weight="600" letter-spacing="1.5">② LIVE SCRIPTS · scripts/live/</text>
+
+  <!-- fetch_universe -->
+  <g filter="url(#shadow)">
+    <rect x="40" y="260" width="290" height="100" rx="10" fill="#1f232c" stroke="#4f8cff" stroke-width="1.5"/>
+    <text x="60" y="288" fill="#4f8cff" font-size="14" font-weight="700">fetch_universe.py</text>
+    <text x="60" y="312" fill="#e8e8ea" font-size="12">yfinance NASDAQ daily bars</text>
+    <text x="60" y="332" fill="#e8e8ea" font-size="12">incremental update (~3min)</text>
+    <text x="60" y="350" fill="#8b93a7" font-size="11">excludes warrants/rights/units</text>
+  </g>
+
+  <!-- monthly_retrain -->
+  <g filter="url(#shadow)">
+    <rect x="350" y="260" width="370" height="100" rx="10" fill="#1f232c" stroke="#f5b342" stroke-width="1.5"/>
+    <text x="370" y="288" fill="#f5b342" font-size="14" font-weight="700">monthly_retrain.py</text>
+    <text x="370" y="312" fill="#e8e8ea" font-size="12">3-month grid search:</text>
+    <text x="370" y="330" fill="#8b93a7" font-size="11">cons × entry_range × tp × hold</text>
+    <text x="370" y="350" fill="#8b93a7" font-size="11">score = win_rate × (1 + p10)</text>
+  </g>
+
+  <!-- weekly_report -->
+  <g filter="url(#shadow)">
+    <rect x="740" y="260" width="320" height="100" rx="10" fill="#1f232c" stroke="#1fbf75" stroke-width="1.5"/>
+    <text x="760" y="288" fill="#1fbf75" font-size="14" font-weight="700">weekly_report.py</text>
+    <text x="760" y="312" fill="#e8e8ea" font-size="12">parse past 7d daily HTMLs</text>
+    <text x="760" y="330" fill="#e8e8ea" font-size="12">resolve outcomes + cumulative</text>
+    <text x="760" y="350" fill="#8b93a7" font-size="11">market regime + insights</text>
+  </g>
+
+  <!-- daily_report (across) -->
+  <g filter="url(#shadow)">
+    <rect x="40" y="385" width="1020" height="80" rx="10" fill="#1f232c" stroke="#4f8cff" stroke-width="1.5"/>
+    <text x="60" y="413" fill="#4f8cff" font-size="14" font-weight="700">daily_report.py</text>
+    <text x="60" y="436" fill="#e8e8ea" font-size="12">5-condition signal detection · per-day, no look-ahead bias</text>
+    <text x="60" y="455" fill="#8b93a7" font-size="11">prior 60d &lt; $1.00 · today close in entry range · prev close &lt; entry_lo · cons avg vol ≥ 10K · first breakout</text>
+  </g>
+
+  <!-- arrow: daily trigger → fetch_universe -->
+  <line x1="185" y1="200" x2="185" y2="258" stroke="#4f8cff" stroke-width="2" marker-end="url(#arrow-blue)"/>
+
+  <!-- arrow: monthly trigger → monthly_retrain -->
+  <line x1="535" y1="200" x2="535" y2="258" stroke="#f5b342" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- arrow: weekly trigger → weekly_report -->
+  <line x1="900" y1="200" x2="900" y2="258" stroke="#1fbf75" stroke-width="2" marker-end="url(#arrow-green)"/>
+
+  <!-- arrow: fetch_universe → daily_report -->
+  <line x1="185" y1="362" x2="185" y2="383" stroke="#5b6275" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- arrow: monthly_retrain → daily_report -->
+  <line x1="535" y1="362" x2="535" y2="383" stroke="#5b6275" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- ================= Layer 3: Data Stores ================= -->
+  <text x="40" y="510" fill="#8b93a7" font-size="11" font-weight="600" letter-spacing="1.5">③ DATA STORES · committed to git</text>
+
+  <!-- daily_cache -->
+  <g filter="url(#shadow)">
+    <rect x="40" y="525" width="290" height="86" rx="10" fill="#181b22" stroke="#2a2f3a"/>
+    <text x="60" y="551" fill="#e8e8ea" font-size="13" font-weight="700">data/daily_cache/</text>
+    <text x="60" y="572" fill="#8b93a7" font-size="11">{TICKER}.csv · 1,400+ files</text>
+    <text x="60" y="590" fill="#8b93a7" font-size="11">~250 trading days each</text>
+    <text x="60" y="606" fill="#8b93a7" font-size="11">_meta.json (last_fetch, stats)</text>
+  </g>
+
+  <!-- config -->
+  <g filter="url(#shadow)">
+    <rect x="350" y="525" width="370" height="86" rx="10" fill="#181b22" stroke="#2a2f3a"/>
+    <text x="370" y="551" fill="#e8e8ea" font-size="13" font-weight="700">config/current_rule.json</text>
+    <text x="370" y="572" fill="#8b93a7" font-size="11">cons_d / entry_lo / entry_hi / tp_ratio / hold_d</text>
+    <text x="370" y="590" fill="#8b93a7" font-size="11">trained_on_period · valid_until</text>
+    <text x="370" y="606" fill="#8b93a7" font-size="11">overwritten monthly</text>
+  </g>
+
+  <!-- reports -->
+  <g filter="url(#shadow)">
+    <rect x="740" y="525" width="320" height="86" rx="10" fill="#181b22" stroke="#2a2f3a"/>
+    <text x="760" y="551" fill="#e8e8ea" font-size="13" font-weight="700">reports/</text>
+    <text x="760" y="572" fill="#8b93a7" font-size="11">YYYY-MM-DD.html · daily</text>
+    <text x="760" y="590" fill="#8b93a7" font-size="11">_weekly_YYYY-WW.html · weekly</text>
+    <text x="760" y="606" fill="#8b93a7" font-size="11">_*_summary.html · monthly</text>
+  </g>
+
+  <!-- arrows: daily_report → data stores -->
+  <line x1="185" y1="467" x2="185" y2="523" stroke="#5b6275" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="535" y1="467" x2="535" y2="523" stroke="#5b6275" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="900" y1="467" x2="900" y2="523" stroke="#5b6275" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- ================= Layer 4: Publishing ================= -->
+  <text x="40" y="660" fill="#8b93a7" font-size="11" font-weight="600" letter-spacing="1.5">④ PUBLISHING</text>
+
+  <!-- git commit -->
+  <g filter="url(#shadow)">
+    <rect x="40" y="675" width="290" height="78" rx="10" fill="#181b22" stroke="#2a2f3a"/>
+    <text x="60" y="700" fill="#e8e8ea" font-size="13" font-weight="700">git commit + push</text>
+    <text x="60" y="720" fill="#8b93a7" font-size="11">github-actions[bot]</text>
+    <text x="60" y="738" fill="#8b93a7" font-size="11">3-retry with rebase on conflict</text>
+  </g>
+
+  <!-- pages deploy -->
+  <g filter="url(#shadow)">
+    <rect x="350" y="675" width="370" height="78" rx="10" fill="#181b22" stroke="#2a2f3a"/>
+    <text x="370" y="700" fill="#e8e8ea" font-size="13" font-weight="700">deploy-pages job</text>
+    <text x="370" y="720" fill="#8b93a7" font-size="11">configure-pages → upload-pages-artifact</text>
+    <text x="370" y="738" fill="#8b93a7" font-size="11">→ deploy-pages (Node 24)</text>
+  </g>
+
+  <!-- live URL -->
+  <g filter="url(#shadow)">
+    <rect x="740" y="675" width="320" height="78" rx="10" fill="#1f232c" stroke="#1fbf75" stroke-width="2"/>
+    <text x="760" y="700" fill="#1fbf75" font-size="13" font-weight="700">GitHub Pages</text>
+    <text x="760" y="720" fill="#e8e8ea" font-size="11" font-family="'SF Mono', Menlo, monospace">stoneidev.github.io/</text>
+    <text x="760" y="738" fill="#e8e8ea" font-size="11" font-family="'SF Mono', Menlo, monospace">pennysniper-validation/</text>
+  </g>
+
+  <!-- arrow: data stores → git commit -->
+  <line x1="185" y1="613" x2="185" y2="673" stroke="#5b6275" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="535" y1="613" x2="535" y2="673" stroke="#5b6275" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="900" y1="613" x2="900" y2="673" stroke="#5b6275" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- arrow: commit → pages deploy → URL -->
+  <line x1="330" y1="714" x2="349" y2="714" stroke="#5b6275" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="720" y1="714" x2="739" y2="714" stroke="#5b6275" stroke-width="2" marker-end="url(#arrow-green)"/>
+
+  <!-- Footer -->
+  <text x="40" y="795" fill="#5b6275" font-size="11">Adaptive walk-forward — rule re-optimized monthly using prior 3 months · 23-hypothesis validated</text>
+</svg>
