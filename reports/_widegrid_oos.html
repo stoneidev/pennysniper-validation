@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wide-grid OOS — win_rate ≥80%</title><style>
+:root{--bg:#0f1115;--panel:#181b22;--panel-2:#1f232c;--border:#2a2f3a;--text:#e8e8ea;--muted:#8b93a7;--accent:#4f8cff;--green:#1fbf75;--red:#ff5b6c;}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
+.container{max-width:1080px;margin:0 auto;padding:32px 20px 80px}
+header{padding-bottom:24px;border-bottom:1px solid var(--border);margin-bottom:28px}
+h1{margin:0 0 6px;font-size:26px;font-weight:700}h2{margin:0 0 14px;font-size:16px;font-weight:600}
+.sub{color:var(--muted);font-size:13px}.nav{margin-top:14px}.nav a{color:var(--accent);text-decoration:none;font-size:13px;margin-right:12px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:20px}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.stat{background:var(--panel-2);border-radius:8px;padding:14px}
+.stat .label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.stat .value{font-size:22px;font-weight:700;margin-top:4px;font-variant-numeric:tabular-nums}
+.stat .value.green{color:var(--green)}.stat .value.red{color:var(--red)}
+table{width:100%;border-collapse:collapse}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);font-size:13px}
+th{background:var(--panel-2);color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-size:11px;font-weight:600}
+td.num{text-align:right;font-variant-numeric:tabular-nums}
+td.win{color:var(--green);font-weight:600}td.lose{color:var(--red);font-weight:600}
+footer{margin-top:40px;padding-top:20px;border-top:1px solid var(--border);color:var(--muted);font-size:11px}
+.note{padding:12px 16px;background:rgba(245,179,66,.08);border-left:3px solid #f5b342;border-radius:4px;font-size:13px;margin:12px 0}
+</style></head>
+<body><div class="container">
+  <header>
+    <h1>Wide-grid OOS — Win Rate ≥80% Filter</h1>
+    <div class="sub">Monthly walk-forward 2018-01~2026-06. Wide entry-range grid (\$1.05~\$5).
+    Selection rule: win_rate≥0.80, N≥5, then maximize win_rate × √N.</div>
+    <div class="nav">
+      <a href="./index.html">← All reports</a>
+      <a href="https://github.com/stoneidev/pennysniper-validation">GitHub</a>
+    </div>
+  </header>
+
+  <div class="card">
+    <h2>Aggregate Stats</h2>
+    <div class="stats-grid">
+      <div class="stat"><div class="label">Total OOS trades</div><div class="value">1192</div></div>
+      <div class="stat"><div class="label">Realized win rate</div><div class="value green">83.5%</div></div>
+      <div class="stat"><div class="label">Mean per trade</div><div class="value green">+0.60%</div></div>
+      <div class="stat"><div class="label">₩1M (25% alloc)</div><div class="value green">₩1,597,342<br><span style="font-size:11px;color:var(--muted)">+60%</span></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Capital Curve (₩1M, 25% alloc, sequential)</h2>
+    
+<svg viewBox="0 0 1000 220" preserveAspectRatio="none" style="width:100%;height:240px">
+  <line x1="30" y1="186.29675390596537" x2="970" y2="186.29675390596537"
+        stroke="#2a2f3a" stroke-dasharray="4,4"/>
+  <path d="M 30.0 186.3 L 30.6 186.0 L 30.9 185.6 L 35.2 185.3 L 37.9 186.8 L 63.0 186.4 L 79.5 188.6 L 86.2 189.8 L 93.3 189.6 L 103.1 189.4 L 153.5 189.2 L 153.5 188.9 L 153.5 188.6 L 159.0 188.4 L 159.3 189.5 L 160.8 189.3 L 161.4 189.0 L 163.0 188.7 L 163.3 188.5 L 165.1 189.7 L 166.3 189.8 L 168.2 189.5 L 170.3 189.3 L 197.2 189.0 L 244.3 188.7 L 253.8 188.5 L 256.2 190.0 L 256.2 189.7 L 259.6 189.5 L 260.2 189.2 L 265.7 189.0 L 266.9 188.7 L 273.0 188.4 L 275.2 188.1 L 275.5 187.8 L 286.2 187.5 L 287.4 187.2 L 287.7 186.9 L 288.0 186.6 L 289.5 186.3 L 289.5 186.0 L 292.0 185.6 L 292.3 185.3 L 293.5 185.0 L 293.8 184.6 L 293.8 184.3 L 294.4 183.9 L 294.4 183.5 L 294.7 183.1 L 294.7 182.7 L 295.6 182.3 L 296.0 181.9 L 296.3 181.5 L 296.3 181.1 L 296.9 180.7 L 298.1 180.2 L 298.4 179.8 L 299.0 179.3 L 300.5 178.9 L 300.8 178.4 L 301.1 177.9 L 301.1 177.4 L 302.1 176.9 L 302.1 176.4 L 304.2 175.9 L 304.8 177.2 L 304.8 176.7 L 306.3 177.6 L 308.8 177.1 L 311.5 176.6 L 313.1 176.0 L 313.7 175.5 L 314.0 177.7 L 315.2 177.2 L 315.8 179.7 L 317.0 179.3 L 317.0 178.8 L 318.0 178.4 L 318.0 177.9 L 318.3 177.4 L 320.4 176.9 L 321.3 176.4 L 321.3 175.8 L 322.2 175.3 L 322.2 174.7 L 322.2 174.2 L 324.1 173.6 L 324.4 173.0 L 325.9 172.5 L 330.2 171.9 L 332.0 171.2 L 332.6 171.0 L 333.2 170.3 L 334.2 169.7 L 335.1 169.0 L 335.4 168.4 L 336.6 167.7 L 338.7 167.0 L 340.6 166.3 L 348.2 165.5 L 351.6 164.8 L 352.5 164.0 L 353.4 163.3 L 353.4 162.5 L 353.7 161.7 L 353.7 160.9 L 354.0 160.0 L 355.6 159.2 L 356.5 158.3 L 357.7 157.4 L 358.3 156.5 L 360.5 155.6 L 362.6 154.7 L 364.1 153.7 L 364.1 152.7 L 369.3 151.7 L 373.0 150.7 L 375.1 149.7 L 376.0 152.7 L 377.0 151.7 L 377.0 150.7 L 377.0 149.7 L 377.0 148.6 L 378.2 147.5 L 379.4 149.9 L 395.3 148.9 L 489.1 151.7 L 493.7 150.7 L 497.1 154.0 L 497.1 153.0 L 497.1 152.0 L 501.4 151.0 L 503.2 153.2 L 505.3 152.3 L 505.3 159.0 L 508.4 163.6 L 529.5 162.8 L 531.0 162.0 L 533.5 161.2 L 533.8 166.2 L 537.8 170.8 L 538.1 170.1 L 539.6 169.5 L 540.2 168.8 L 540.8 168.2 L 541.7 167.5 L 542.3 166.8 L 542.6 166.0 L 543.9 165.3 L 543.9 168.8 L 543.9 168.1 L 544.5 170.5 L 544.5 169.9 L 545.1 169.2 L 546.0 168.5 L 546.0 167.9 L 546.3 167.2 L 546.3 167.5 L 547.2 170.3 L 549.1 169.7 L 555.5 169.0 L 555.8 168.4 L 557.6 170.0 L 560.1 169.3 L 569.9 168.7 L 569.9 171.1 L 570.2 174.3 L 571.7 173.8 L 571.7 176.2 L 572.3 175.7 L 572.3 175.1 L 572.9 174.6 L 574.1 174.0 L 574.1 173.5 L 575.0 172.9 L 576.0 172.3 L 576.6 174.1 L 577.2 173.5 L 578.1 172.9 L 579.0 174.5 L 579.3 175.4 L 580.2 174.8 L 580.5 174.3 L 581.5 173.7 L 583.0 173.1 L 583.6 172.5 L 585.1 171.9 L 585.7 171.3 L 589.4 170.7 L 589.4 170.1 L 590.0 169.4 L 591.2 168.7 L 591.6 168.1 L 591.6 167.4 L 591.6 166.7 L 591.6 165.9 L 591.9 165.2 L 591.9 165.4 L 591.9 164.6 L 591.9 163.9 L 592.2 163.1 L 593.7 164.9 L 593.7 164.1 L 595.2 168.2 L 595.2 167.5 L 596.1 166.8 L 597.7 166.1 L 598.0 165.4 L 598.0 164.7 L 598.3 163.9 L 598.3 165.9 L 598.3 165.2 L 598.6 169.9 L 599.5 171.8 L 602.3 171.2 L 602.9 170.6 L 602.9 172.8 L 604.1 172.2 L 604.1 174.3 L 604.7 173.8 L 605.0 173.2 L 605.9 172.6 L 613.3 172.0 L 614.5 171.4 L 615.1 174.4 L 616.6 173.9 L 616.6 173.3 L 617.2 172.7 L 617.2 172.1 L 619.1 171.5 L 619.1 170.9 L 619.4 170.3 L 619.7 169.6 L 620.9 169.0 L 620.9 168.3 L 621.2 167.6 L 623.0 172.4 L 624.3 171.8 L 625.2 171.2 L 625.8 170.6 L 627.6 169.9 L 627.6 172.0 L 627.9 171.4 L 627.9 174.5 L 627.9 173.9 L 628.2 173.3 L 628.5 172.7 L 629.5 172.1 L 629.5 171.5 L 630.4 170.9 L 630.4 170.3 L 630.4 169.6 L 630.7 169.0 L 630.7 168.3 L 634.4 167.6 L 634.4 166.9 L 634.7 166.2 L 634.7 167.2 L 635.9 166.5 L 636.2 165.8 L 636.5 165.0 L 636.5 164.3 L 636.5 163.5 L 638.3 162.7 L 638.3 161.9 L 638.6 162.8 L 640.5 162.0 L 640.8 165.6 L 642.9 168.1 L 642.9 167.5 L 642.9 166.7 L 643.2 166.0 L 643.5 169.7 L 644.4 169.0 L 644.4 168.3 L 645.1 167.6 L 645.1 169.7 L 645.1 169.1 L 645.7 168.4 L 645.7 167.7 L 646.6 167.0 L 646.6 172.0 L 647.5 171.4 L 647.5 170.8 L 647.5 174.4 L 649.0 173.9 L 649.9 176.2 L 651.8 179.9 L 652.1 179.5 L 655.1 179.0 L 655.4 178.5 L 657.3 179.5 L 657.3 179.1 L 657.6 178.6 L 661.9 178.1 L 662.2 177.6 L 662.5 177.1 L 662.5 176.6 L 664.0 176.1 L 665.8 175.6 L 666.8 175.0 L 668.0 174.5 L 670.1 173.9 L 670.7 173.3 L 671.0 172.7 L 671.3 175.4 L 672.9 174.9 L 674.4 174.3 L 674.7 176.0 L 679.9 178.5 L 681.4 178.0 L 681.4 177.5 L 683.0 177.0 L 683.0 176.5 L 683.3 179.7 L 683.3 179.2 L 683.3 178.8 L 684.2 178.3 L 686.3 177.8 L 686.3 178.7 L 687.2 178.2 L 687.2 177.7 L 687.2 177.2 L 687.8 177.6 L 687.8 177.1 L 688.5 176.6 L 688.5 176.1 L 688.5 175.6 L 689.4 175.0 L 690.0 174.5 L 690.0 173.9 L 690.3 173.3 L 690.3 172.7 L 690.6 172.1 L 690.6 171.5 L 690.6 170.9 L 691.8 170.3 L 692.1 169.6 L 692.1 169.0 L 692.4 168.3 L 692.4 167.6 L 692.4 166.9 L 692.7 166.2 L 692.7 165.5 L 693.7 164.7 L 694.0 164.0 L 694.0 163.2 L 694.6 162.4 L 694.6 161.6 L 694.6 160.8 L 695.8 160.0 L 695.8 159.1 L 696.1 158.2 L 696.1 161.3 L 696.1 160.4 L 696.7 159.6 L 696.7 158.7 L 696.7 157.9 L 697.0 157.0 L 697.0 156.1 L 698.2 155.1 L 698.2 154.2 L 698.2 157.7 L 698.5 156.8 L 698.5 155.9 L 698.5 155.0 L 698.5 154.0 L 698.5 153.0 L 698.5 152.0 L 698.5 151.0 L 698.9 150.0 L 699.2 148.9 L 699.2 147.9 L 700.4 146.8 L 700.4 148.0 L 700.4 151.4 L 700.7 150.4 L 700.7 149.3 L 701.0 148.2 L 701.0 147.2 L 702.2 146.1 L 702.2 144.9 L 702.2 143.8 L 702.5 147.7 L 702.8 146.6 L 702.8 148.3 L 703.1 147.2 L 703.1 146.1 L 705.0 145.0 L 705.3 143.9 L 706.8 142.7 L 709.6 141.5 L 709.6 140.3 L 709.9 139.0 L 710.8 147.0 L 711.1 145.9 L 711.7 144.7 L 712.0 143.6 L 712.0 142.4 L 712.9 141.2 L 713.2 140.0 L 713.5 138.7 L 713.5 137.4 L 713.8 136.1 L 713.8 143.6 L 714.1 142.4 L 714.1 148.4 L 714.1 147.4 L 714.1 146.3 L 715.4 145.1 L 715.4 144.0 L 715.7 142.8 L 716.3 141.6 L 717.2 140.4 L 717.2 143.8 L 717.5 142.6 L 717.5 141.4 L 717.5 140.2 L 717.5 139.0 L 717.5 137.7 L 717.8 136.4 L 718.1 135.1 L 718.4 133.7 L 718.4 132.3 L 718.4 130.9 L 718.4 140.4 L 719.3 142.2 L 719.3 149.7 L 719.3 153.7 L 719.3 160.0 L 719.6 159.1 L 719.6 158.2 L 719.6 157.3 L 719.9 156.4 L 720.3 155.5 L 720.3 154.6 L 720.3 153.6 L 721.5 152.6 L 721.5 151.6 L 722.1 150.6 L 722.1 152.1 L 722.1 151.1 L 724.5 150.0 L 724.8 149.0 L 725.8 147.9 L 726.1 146.8 L 726.1 145.7 L 726.4 144.6 L 726.4 143.4 L 726.7 147.2 L 727.9 146.1 L 728.2 145.0 L 728.8 143.8 L 729.1 142.6 L 730.3 148.9 L 730.3 147.8 L 732.2 155.4 L 732.2 154.4 L 732.8 158.3 L 734.9 157.4 L 736.5 156.5 L 736.8 161.5 L 737.1 160.7 L 737.7 159.9 L 738.6 159.0 L 738.6 162.2 L 739.5 161.4 L 739.5 160.6 L 739.5 159.7 L 740.7 158.9 L 740.7 158.0 L 740.7 157.1 L 741.0 156.2 L 741.0 160.9 L 741.3 160.1 L 741.3 159.2 L 742.0 158.3 L 742.9 157.5 L 742.9 156.5 L 743.8 155.6 L 744.1 154.7 L 744.1 155.8 L 744.1 160.6 L 745.6 159.7 L 746.2 158.9 L 746.2 158.0 L 751.4 157.1 L 753.6 162.7 L 754.5 165.3 L 754.5 164.6 L 754.5 163.8 L 754.8 163.1 L 755.7 162.3 L 756.0 161.5 L 758.5 163.4 L 758.8 162.7 L 759.1 161.9 L 759.1 165.7 L 760.0 164.9 L 760.0 164.2 L 760.3 167.9 L 760.3 169.6 L 760.9 171.2 L 760.9 170.5 L 762.4 169.9 L 764.6 169.2 L 765.2 168.6 L 766.7 167.9 L 768.9 167.2 L 769.2 166.5 L 769.5 165.8 L 769.8 165.0 L 769.8 164.3 L 769.8 166.7 L 770.7 166.0 L 771.6 168.6 L 773.7 167.9 L 774.1 167.2 L 775.3 166.5 L 776.2 165.8 L 777.1 165.1 L 778.0 164.3 L 778.3 163.6 L 779.2 162.8 L 779.2 162.0 L 779.9 161.2 L 780.2 160.3 L 780.2 159.5 L 780.5 164.0 L 780.5 163.3 L 780.5 162.5 L 781.4 161.7 L 781.4 161.6 L 782.3 160.8 L 782.3 160.0 L 782.3 159.1 L 782.3 158.3 L 782.6 160.1 L 782.6 159.3 L 783.5 158.4 L 783.5 157.5 L 783.5 163.0 L 783.8 162.2 L 784.1 161.4 L 784.1 160.6 L 784.1 159.8 L 784.4 158.9 L 785.7 158.0 L 786.0 157.1 L 786.9 156.2 L 786.9 155.3 L 786.9 162.6 L 786.9 161.8 L 786.9 160.9 L 787.8 160.1 L 787.8 159.3 L 788.1 158.4 L 788.4 157.5 L 788.7 156.6 L 788.7 166.7 L 788.7 165.9 L 789.0 165.2 L 789.9 164.5 L 789.9 163.7 L 790.3 166.5 L 790.9 165.7 L 790.9 165.0 L 792.1 164.3 L 792.1 163.5 L 792.4 162.7 L 792.7 169.6 L 792.7 173.5 L 792.7 176.8 L 793.3 176.2 L 794.2 175.7 L 794.8 175.2 L 794.8 174.6 L 794.8 174.1 L 794.8 173.5 L 795.5 172.9 L 795.5 176.8 L 796.4 176.3 L 796.4 175.8 L 796.7 175.3 L 796.7 174.7 L 796.7 174.1 L 797.0 173.6 L 797.0 173.0 L 797.3 172.4 L 797.6 171.8 L 799.1 171.2 L 799.7 170.6 L 800.6 169.9 L 800.6 169.3 L 800.6 168.6 L 800.6 167.9 L 800.6 167.2 L 800.6 166.5 L 801.0 170.5 L 801.0 169.9 L 801.3 169.2 L 801.9 168.6 L 801.9 167.9 L 802.8 173.2 L 802.8 174.4 L 802.8 173.9 L 802.8 173.3 L 802.8 172.7 L 803.1 172.1 L 803.1 176.4 L 803.4 175.8 L 803.4 175.3 L 803.7 178.1 L 803.7 179.8 L 804.0 179.4 L 804.0 178.9 L 804.0 178.4 L 804.0 177.9 L 804.0 177.4 L 804.9 176.9 L 805.2 176.4 L 805.2 175.9 L 805.2 175.4 L 805.8 174.8 L 806.1 174.3 L 807.1 173.7 L 807.4 173.1 L 807.7 177.7 L 807.7 177.2 L 807.7 176.7 L 807.7 176.2 L 809.2 175.7 L 809.5 175.2 L 809.5 174.6 L 809.5 174.1 L 810.1 173.5 L 810.1 172.9 L 810.1 174.8 L 810.1 177.7 L 810.4 177.2 L 810.4 176.7 L 810.4 176.2 L 811.3 175.6 L 811.3 177.9 L 811.3 180.7 L 811.7 180.3 L 811.7 179.8 L 811.7 179.4 L 812.3 180.0 L 812.3 179.6 L 812.6 179.1 L 812.6 178.7 L 813.5 178.2 L 813.5 177.7 L 813.5 177.2 L 813.8 176.7 L 813.8 176.2 L 814.1 175.7 L 814.7 175.1 L 815.6 174.6 L 815.6 174.0 L 815.9 173.4 L 815.9 172.9 L 816.2 172.3 L 816.5 171.6 L 816.5 171.0 L 819.0 170.4 L 819.0 169.8 L 819.0 173.3 L 819.9 178.3 L 819.9 177.8 L 819.9 180.1 L 820.5 179.7 L 820.5 179.2 L 822.0 178.7 L 822.4 178.3 L 822.4 180.3 L 822.4 183.0 L 822.7 186.8 L 823.0 188.3 L 823.3 188.0 L 824.5 187.7 L 825.1 187.5 L 826.6 187.1 L 826.6 186.8 L 826.6 188.4 L 829.4 188.1 L 831.5 187.8 L 833.4 187.5 L 833.4 187.2 L 834.9 186.9 L 835.5 186.6 L 835.5 186.2 L 837.0 185.9 L 837.0 185.6 L 837.6 185.2 L 839.5 184.9 L 839.8 184.5 L 842.5 184.2 L 843.4 183.8 L 843.4 183.4 L 844.1 183.1 L 844.4 182.7 L 844.4 182.3 L 845.6 181.9 L 845.9 181.4 L 846.8 181.0 L 847.7 180.6 L 848.0 180.2 L 848.3 179.7 L 848.6 179.2 L 848.6 178.8 L 848.6 178.3 L 848.6 177.8 L 848.9 180.3 L 849.9 182.0 L 850.2 181.6 L 850.2 181.1 L 850.5 180.7 L 850.5 180.3 L 850.8 179.8 L 850.8 179.4 L 850.8 182.3 L 852.0 181.9 L 852.0 181.4 L 852.0 181.0 L 852.0 180.6 L 852.0 180.1 L 852.0 179.7 L 852.3 179.2 L 852.3 178.8 L 852.6 178.3 L 852.6 177.8 L 852.6 181.0 L 852.9 180.5 L 852.9 180.1 L 852.9 179.7 L 853.2 179.2 L 853.2 178.7 L 853.2 178.3 L 853.2 177.8 L 853.2 177.3 L 853.2 176.8 L 853.2 176.2 L 853.2 175.7 L 853.2 175.2 L 854.1 174.6 L 854.1 174.1 L 854.1 173.5 L 854.1 172.9 L 854.1 172.3 L 854.1 171.7 L 854.4 171.1 L 855.1 170.5 L 855.1 169.8 L 855.1 169.2 L 855.4 168.5 L 856.6 167.8 L 856.6 167.1 L 856.6 166.4 L 856.9 165.7 L 856.9 165.0 L 857.5 164.2 L 858.4 163.4 L 858.4 162.7 L 858.4 161.9 L 858.4 161.1 L 858.4 160.2 L 858.7 159.4 L 859.0 158.5 L 859.3 157.6 L 859.3 156.7 L 859.6 155.8 L 859.6 154.9 L 859.6 153.9 L 860.6 152.9 L 860.6 152.0 L 860.6 150.9 L 860.9 149.9 L 860.9 155.2 L 860.9 154.2 L 860.9 153.3 L 860.9 152.3 L 860.9 151.3 L 860.9 150.3 L 860.9 149.2 L 861.2 148.1 L 861.5 150.5 L 861.5 149.5 L 861.5 148.4 L 861.8 147.3 L 861.8 146.2 L 862.7 145.1 L 862.7 144.0 L 863.0 142.8 L 863.0 141.6 L 863.0 140.4 L 863.0 139.1 L 863.0 137.8 L 863.9 136.6 L 863.9 139.1 L 863.9 137.9 L 865.5 136.6 L 865.5 135.3 L 865.8 133.9 L 865.8 132.5 L 865.8 131.1 L 865.8 129.7 L 865.8 128.3 L 866.1 126.8 L 866.1 125.2 L 867.0 123.7 L 867.3 122.1 L 867.3 120.5 L 867.3 118.9 L 867.3 117.2 L 867.3 115.5 L 867.6 123.1 L 867.6 131.9 L 867.6 130.5 L 867.9 138.2 L 869.1 136.9 L 869.1 135.6 L 869.1 134.3 L 869.4 132.9 L 869.4 131.5 L 869.4 130.1 L 869.4 135.0 L 869.7 133.6 L 869.7 132.2 L 869.7 130.8 L 869.7 129.4 L 869.7 127.9 L 870.0 126.4 L 870.0 124.9 L 870.0 123.4 L 870.3 121.8 L 870.3 128.8 L 870.3 127.3 L 871.3 125.8 L 871.3 124.3 L 871.6 122.7 L 871.9 121.1 L 871.9 119.5 L 871.9 117.8 L 871.9 116.2 L 872.2 114.4 L 872.2 112.7 L 872.2 110.9 L 872.2 109.0 L 872.5 107.2 L 873.4 105.2 L 873.4 112.1 L 873.4 110.2 L 873.4 108.4 L 873.4 106.5 L 873.7 117.1 L 873.7 115.4 L 873.7 113.7 L 873.7 117.7 L 874.0 116.0 L 874.0 114.3 L 874.0 121.0 L 874.3 119.3 L 874.3 117.7 L 874.3 116.0 L 874.6 114.3 L 874.6 112.5 L 874.6 110.7 L 876.2 108.8 L 876.2 107.0 L 876.2 114.2 L 876.5 112.4 L 876.5 110.6 L 876.5 108.8 L 877.7 106.9 L 878.0 105.0 L 878.9 103.0 L 878.9 101.0 L 879.8 99.0 L 879.8 96.9 L 880.1 94.8 L 880.1 92.6 L 880.7 90.4 L 880.7 88.2 L 881.0 85.9 L 882.0 83.6 L 882.0 81.2 L 882.0 86.4 L 882.3 84.1 L 882.6 81.7 L 882.6 79.3 L 883.2 76.9 L 884.1 74.4 L 884.1 71.8 L 884.1 69.2 L 884.4 66.5 L 884.4 63.8 L 885.0 61.0 L 885.0 58.2 L 885.0 55.3 L 885.3 52.3 L 886.5 49.3 L 886.5 46.3 L 886.5 43.1 L 886.9 40.0 L 886.9 36.7 L 886.9 33.4 L 887.2 30.0 L 887.5 35.0 L 888.4 55.2 L 888.7 52.3 L 888.7 49.3 L 889.0 46.2 L 889.0 43.1 L 889.0 39.9 L 889.3 59.9 L 889.3 57.0 L 889.3 54.1 L 889.3 51.1 L 889.6 48.1 L 890.5 45.0 L 890.5 41.9 L 890.5 38.6 L 890.5 35.4 L 890.8 32.0 L 890.8 41.5 L 890.8 38.2 L 890.8 48.6 L 890.8 45.5 L 891.1 42.4 L 891.1 39.2 L 891.1 35.9 L 891.4 64.6 L 891.4 61.9 L 891.4 59.1 L 891.4 56.2 L 891.4 53.3 L 891.7 50.3 L 892.7 47.2 L 892.7 44.1 L 892.7 40.9 L 893.0 37.7 L 893.0 62.3 L 893.0 59.5 L 893.3 56.6 L 893.3 53.7 L 893.3 50.7 L 893.6 76.9 L 893.9 74.4 L 894.8 71.8 L 894.8 69.2 L 894.8 66.6 L 895.1 63.8 L 895.1 61.1 L 895.1 58.2 L 895.1 55.3 L 895.4 52.4 L 895.4 49.4 L 895.7 66.1 L 895.7 63.4 L 895.7 60.6 L 895.7 57.7 L 895.7 90.0 L 896.0 87.7 L 896.0 85.4 L 896.0 83.1 L 896.0 80.7 L 896.0 78.2 L 896.0 75.8 L 896.9 73.2 L 896.9 70.6 L 896.9 68.0 L 896.9 65.3 L 896.9 80.6 L 897.2 78.2 L 897.2 75.7 L 897.6 73.1 L 897.6 70.5 L 897.9 67.9 L 897.9 92.7 L 898.2 90.5 L 899.1 88.2 L 899.1 85.9 L 899.1 93.4 L 899.1 91.2 L 899.1 89.0 L 899.4 86.7 L 899.4 84.4 L 899.7 107.3 L 900.0 124.1 L 900.0 136.4 L 900.3 135.1 L 901.2 148.1 L 901.2 147.0 L 901.5 152.2 L 901.5 151.2 L 901.5 152.3 L 901.5 151.3 L 901.5 150.3 L 901.8 149.2 L 901.8 148.1 L 902.1 153.7 L 902.1 152.7 L 902.1 151.7 L 902.1 162.0 L 902.4 161.2 L 903.4 169.0 L 904.6 168.3 L 906.1 167.6 L 906.1 167.0 L 906.7 166.2 L 907.6 165.5 L 907.9 164.8 L 908.3 164.0 L 908.9 163.2 L 908.9 162.5 L 910.1 161.7 L 910.1 160.8 L 911.9 160.0 L 912.5 159.1 L 913.1 158.3 L 915.0 157.4 L 915.0 156.5 L 915.0 155.6 L 915.3 154.6 L 915.3 153.7 L 916.2 152.7 L 916.2 151.7 L 916.5 150.7 L 916.8 149.6 L 916.8 148.6 L 917.1 147.5 L 917.1 155.3 L 918.6 160.1 L 918.9 164.2 L 919.6 163.4 L 920.8 162.7 L 920.8 161.9 L 920.8 161.0 L 921.1 160.2 L 921.1 167.8 L 921.1 167.1 L 921.7 166.4 L 924.8 165.7 L 924.8 165.0 L 924.8 164.2 L 925.1 166.2 L 925.1 165.5 L 925.1 164.7 L 925.1 169.4 L 925.1 168.7 L 925.1 168.0 L 925.4 167.3 L 925.4 166.6 L 925.4 165.9 L 925.7 165.2 L 926.0 164.4 L 926.9 163.7 L 926.9 162.9 L 926.9 170.6 L 927.5 169.9 L 927.5 169.3 L 927.5 168.6 L 927.8 167.9 L 927.8 167.2 L 928.1 166.5 L 928.1 165.8 L 929.6 165.1 L 929.6 164.3 L 930.0 163.6 L 930.0 162.8 L 930.3 162.0 L 930.3 161.2 L 930.3 160.3 L 930.3 159.5 L 931.2 158.6 L 931.2 157.8 L 931.2 156.9 L 933.6 156.0 L 933.6 162.7 L 933.9 161.9 L 934.2 161.1 L 935.5 160.2 L 935.5 159.4 L 936.1 158.5 L 937.9 157.6 L 938.2 156.7 L 938.2 155.8 L 938.5 154.9 L 938.8 153.9 L 940.0 162.8 L 940.0 162.0 L 940.3 161.2 L 940.3 160.3 L 940.7 159.5 L 941.0 158.6 L 942.2 157.7 L 942.5 156.9 L 942.8 155.9 L 943.1 155.0 L 943.1 154.1 L 943.1 156.3 L 944.0 155.4 L 944.0 154.4 L 944.0 161.0 L 944.0 160.2 L 944.6 159.3 L 944.6 158.4 L 944.6 157.6 L 944.6 156.7 L 944.6 155.7 L 944.6 154.8 L 944.6 153.9 L 944.9 152.9 L 944.9 151.9 L 945.2 150.9 L 945.2 149.8 L 945.2 148.8 L 946.2 153.6 L 946.2 155.7 L 946.5 154.7 L 946.8 153.8 L 948.9 152.8 L 949.2 151.8 L 949.2 151.8 L 950.7 150.8 L 952.6 149.8 L 953.2 148.7 L 953.2 147.6 L 953.5 146.5 L 954.7 145.4 L 954.7 144.3 L 954.7 143.1 L 955.0 141.9 L 955.6 140.7 L 955.9 142.1 L 955.9 140.9 L 955.9 147.8 L 955.9 146.7 L 955.9 145.6 L 955.9 152.2 L 957.2 151.2 L 957.2 159.6 L 957.8 158.7 L 959.0 163.7 L 959.0 162.9 L 959.3 165.6 L 959.9 167.3 L 959.9 166.6 L 959.9 165.9 L 959.9 168.5 L 959.9 167.8 L 960.2 167.2 L 960.2 170.1 L 960.2 169.5 L 961.1 168.8 L 961.4 168.1 L 961.7 167.5 L 961.7 166.7 L 961.7 168.7 L 962.4 168.0 L 962.4 168.9 L 962.4 168.3 L 962.4 171.9 L 963.3 173.7 L 963.3 173.1 L 963.6 172.5 L 963.6 171.9 L 963.6 171.3 L 963.9 170.7 L 963.9 170.0 L 963.9 173.3 L 963.9 175.7 L 963.9 175.2 L 964.2 174.7 L 964.2 176.1 L 965.4 175.5 L 965.4 177.8 L 965.7 177.3 L 966.0 176.8 L 966.0 176.3 L 966.0 175.7 L 966.3 176.4 L 966.6 178.8 L 966.6 179.9 L 966.6 179.5 L 967.9 179.0 L 967.9 178.5 L 967.9 178.1 L 968.2 177.6 L 968.2 177.1 L 970.0 176.6" stroke="#1fbf75" stroke-width="2" fill="none"/>
+  <text x="30" y="18" fill="#e8e8ea" font-size="12" font-weight="600">
+    ₩1M start → ₩1,597,342 (+60%)
+  </text>
+</svg>
+
+  </div>
+
+  <div class="card">
+    <h2>Per-year</h2>
+    <table><tr><th>Year</th><th>Trades</th><th>Win%</th><th>Mean</th><th>Sum</th><th>₩1M (25%)</th></tr><tr>
+          <td>2018</td>
+          <td class="num">9</td>
+          <td class="num">67%</td>
+          <td class="num lose">-8.69%</td>
+          <td class="num lose">-78.2%</td>
+          <td class="num">₩807,036</td>
+        </tr><tr>
+          <td>2019</td>
+          <td class="num">15</td>
+          <td class="num">80%</td>
+          <td class="num win">+1.68%</td>
+          <td class="num win">+25.2%</td>
+          <td class="num">₩1,054,034</td>
+        </tr><tr>
+          <td>2020</td>
+          <td class="num">90</td>
+          <td class="num">94%</td>
+          <td class="num win">+5.84%</td>
+          <td class="num win">+525.7%</td>
+          <td class="num">₩3,598,456</td>
+        </tr><tr>
+          <td>2021</td>
+          <td class="num">11</td>
+          <td class="num">82%</td>
+          <td class="num win">+2.88%</td>
+          <td class="num win">+31.7%</td>
+          <td class="num">₩1,077,683</td>
+        </tr><tr>
+          <td>2022</td>
+          <td class="num">62</td>
+          <td class="num">71%</td>
+          <td class="num lose">-3.02%</td>
+          <td class="num lose">-187.2%</td>
+          <td class="num">₩581,974</td>
+        </tr><tr>
+          <td>2023</td>
+          <td class="num">185</td>
+          <td class="num">83%</td>
+          <td class="num win">+1.53%</td>
+          <td class="num win">+283.8%</td>
+          <td class="num">₩1,749,902</td>
+        </tr><tr>
+          <td>2024</td>
+          <td class="num">275</td>
+          <td class="num">81%</td>
+          <td class="num lose">-0.75%</td>
+          <td class="num lose">-205.4%</td>
+          <td class="num">₩423,994</td>
+        </tr><tr>
+          <td>2025</td>
+          <td class="num">396</td>
+          <td class="num">87%</td>
+          <td class="num win">+0.96%</td>
+          <td class="num win">+381.8%</td>
+          <td class="num">₩1,558,359</td>
+        </tr><tr>
+          <td>2026</td>
+          <td class="num">149</td>
+          <td class="num">81%</td>
+          <td class="num lose">-0.41%</td>
+          <td class="num lose">-60.7%</td>
+          <td class="num">₩719,613</td>
+        </tr></table>
+  </div>
+
+  <div class="card">
+    <h2>Monthly Log</h2>
+    <table><tr><th>Month</th><th>Chosen Rule</th><th>Train N</th><th>Train Win%</th><th>Test N</th><th>Test Mean</th></tr><tr>
+          <td>2018-01</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/30d</code></td>
+          <td class="num">7</td>
+          <td class="num">100%</td>
+          <td class="num">4</td>
+          <td class="num lose">-2.4%</td>
+        </tr><tr>
+          <td>2018-02</td>
+          <td><code>30d/sub$2.0/$2.00-$2.50/+10%/30d</code></td>
+          <td class="num">9</td>
+          <td class="num">89%</td>
+          <td class="num">0</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2018-03</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num">0</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2018-04</td>
+          <td><code>30d/sub$2.0/$2.00-$2.50/+10%/60d</code></td>
+          <td class="num">7</td>
+          <td class="num">86%</td>
+          <td class="num">1</td>
+          <td class="num win">+8.0%</td>
+        </tr><tr>
+          <td>2018-05</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num">0</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2018-06</td>
+          <td><code>30d/sub$2.0/$2.00-$2.50/+10%/90d</code></td>
+          <td class="num">10</td>
+          <td class="num">100%</td>
+          <td class="num">1</td>
+          <td class="num lose">-54.4%</td>
+        </tr><tr>
+          <td>2018-07</td>
+          <td><code>30d/sub$2.0/$2.00-$2.50/+10%/90d</code></td>
+          <td class="num">8</td>
+          <td class="num">88%</td>
+          <td class="num">2</td>
+          <td class="num lose">-12.9%</td>
+        </tr><tr>
+          <td>2018-08</td>
+          <td><code>30d/sub$1.5/$1.50-$2.00/+10%/90d</code></td>
+          <td class="num">6</td>
+          <td class="num">100%</td>
+          <td class="num">1</td>
+          <td class="num win">+3.7%</td>
+        </tr><tr>
+          <td>2018-09</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num">0</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2018-10</td>
+          <td><code>30d/sub$2.0/$2.00-$2.50/+10%/30d</code></td>
+          <td class="num">6</td>
+          <td class="num">83%</td>
+          <td class="num">0</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2018-11</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/30d</code></td>
+          <td class="num">5</td>
+          <td class="num">80%</td>
+          <td class="num">0</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2018-12</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num">0</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2019-01</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num">0</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2019-02</td>
+          <td><code>30d/sub$2.0/$2.00-$2.50/+10%/60d</code></td>
+          <td class="num">5</td>
+          <td class="num">80%</td>
+          <td class="num">5</td>
+          <td class="num lose">-0.3%</td>
+        </tr><tr>
+          <td>2019-03</td>
+          <td><code>30d/sub$2.0/$2.00-$2.50/+10%/60d</code></td>
+          <td class="num">10</td>
+          <td class="num">80%</td>
+          <td class="num">7</td>
+          <td class="num win">+0.4%</td>
+        </tr><tr>
+          <td>2019-04</td>
+          <td><code>30d/sub$1.5/$1.50-$2.00/+10%/60d</code></td>
+          <td class="num">12</td>
+          <td class="num">92%</td>
+          <td class="num">1</td>
+          <td class="num win">+8.0%</td>
+        </tr><tr>
+          <td>2019-05</td>
+          <td><code>30d/sub$1.5/$1.50-$2.00/+10%/30d</code></td>
+          <td class="num">11</td>
+          <td class="num">91%</td>
+          <td class="num">0</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2019-06</td>
+          <td><code>30d/sub$1.5/$1.50-$2.00/+10%/30d</code></td>
+          <td class="num">6</td>
+          <td class="num">100%</td>
+          <td class="num">0</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2019-07</td>
+          <td><code>30d/sub$2.0/$2.00-$2.50/+10%/60d</code></td>
+          <td class="num">7</td>
+          <td class="num">86%</td>
+          <td class="num">1</td>
+          <td class="num win">+8.0%</td>
+        </tr><tr>
+          <td>2019-08</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num">0</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2019-09</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num">0</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2019-10</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num">0</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2019-11</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num">0</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2019-12</td>
+          <td><code>60d/sub$1.5/$1.50-$1.80/+10%/30d</code></td>
+          <td class="num">5</td>
+          <td class="num">80%</td>
+          <td class="num">1</td>
+          <td class="num win">+8.0%</td>
+        </tr><tr>
+          <td>2020-01</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/90d</code></td>
+          <td class="num">8</td>
+          <td class="num">100%</td>
+          <td class="num">5</td>
+          <td class="num lose">-2.4%</td>
+        </tr><tr>
+          <td>2020-02</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/90d</code></td>
+          <td class="num">13</td>
+          <td class="num">92%</td>
+          <td class="num">2</td>
+          <td class="num win">+8.0%</td>
+        </tr><tr>
+          <td>2020-03</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/90d</code></td>
+          <td class="num">14</td>
+          <td class="num">93%</td>
+          <td class="num">3</td>
+          <td class="num win">+8.0%</td>
+        </tr><tr>
+          <td>2020-04</td>
+          <td><code>30d/sub$2.0/$2.00-$2.50/+10%/90d</code></td>
+          <td class="num">10</td>
+          <td class="num">90%</td>
+          <td class="num">6</td>
+          <td class="num win">+8.0%</td>
+        </tr><tr>
+          <td>2020-05</td>
+          <td><code>30d/sub$2.0/$2.00-$2.50/+10%/90d</code></td>
+          <td class="num">11</td>
+          <td class="num">100%</td>
+          <td class="num">17</td>
+          <td class="num win">+8.0%</td>
+        </tr><tr>
+          <td>2020-06</td>
+          <td><code>30d/sub$2.0/$2.00-$2.50/+10%/90d</code></td>
+          <td class="num">26</td>
+          <td class="num">100%</td>
+          <td class="num">11</td>
+          <td class="num win">+3.5%</td>
+        </tr><tr>
+          <td>2020-07</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/90d</code></td>
+          <td class="num">37</td>
+          <td class="num">95%</td>
+          <td class="num">11</td>
+          <td class="num lose">-0.0%</td>
+        </tr><tr>
+          <td>2020-08</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/90d</code></td>
+          <td class="num">42</td>
+          <td class="num">90%</td>
+          <td class="num">9</td>
+          <td class="num win">+8.0%</td>
+        </tr><tr>
+          <td>2020-09</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/60d</code></td>
+          <td class="num">34</td>
+          <td class="num">88%</td>
+          <td class="num">8</td>
+          <td class="num win">+7.4%</td>
+        </tr><tr>
+          <td>2020-10</td>
+          <td><code>30d/sub$2.0/$2.00-$2.50/+10%/60d</code></td>
+          <td class="num">28</td>
+          <td class="num">93%</td>
+          <td class="num">2</td>
+          <td class="num win">+8.0%</td>
+        </tr><tr>
+          <td>2020-11</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/90d</code></td>
+          <td class="num">24</td>
+          <td class="num">100%</td>
+          <td class="num">9</td>
+          <td class="num win">+8.0%</td>
+        </tr><tr>
+          <td>2020-12</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/90d</code></td>
+          <td class="num">24</td>
+          <td class="num">100%</td>
+          <td class="num">7</td>
+          <td class="num win">+8.0%</td>
+        </tr><tr>
+          <td>2021-01</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/90d</code></td>
+          <td class="num">23</td>
+          <td class="num">100%</td>
+          <td class="num">2</td>
+          <td class="num win">+8.0%</td>
+        </tr><tr>
+          <td>2021-02</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/30d</code></td>
+          <td class="num">18</td>
+          <td class="num">100%</td>
+          <td class="num">8</td>
+          <td class="num win">+1.0%</td>
+        </tr><tr>
+          <td>2021-03</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/60d</code></td>
+          <td class="num">17</td>
+          <td class="num">94%</td>
+          <td class="num">0</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2021-04</td>
+          <td><code>30d/sub$2.0/$2.00-$2.50/+10%/60d</code></td>
+          <td class="num">10</td>
+          <td class="num">90%</td>
+          <td class="num">1</td>
+          <td class="num win">+8.0%</td>
+        </tr><tr>
+          <td>2021-05</td>
+          <td><code>30d/sub$2.0/$2.00-$2.50/+10%/60d</code></td>
+          <td class="num">9</td>
+          <td class="num">89%</td>
+          <td class="num">0</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2021-06</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num">0</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2021-07</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num">0</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2021-08</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num">0</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2021-09</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num">0</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2021-10</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num">0</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2021-11</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num">0</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2021-12</td>
+          <td><code>30d/sub$2.0/$2.00-$2.50/+10%/60d</code></td>
+          <td class="num">5</td>
+          <td class="num">100%</td>
+          <td class="num">0</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2022-01</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num">0</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2022-02</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/30d</code></td>
+          <td class="num">5</td>
+          <td class="num">100%</td>
+          <td class="num">2</td>
+          <td class="num lose">-6.7%</td>
+        </tr><tr>
+          <td>2022-03</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/30d</code></td>
+          <td class="num">5</td>
+          <td class="num">80%</td>
+          <td class="num">5</td>
+          <td class="num lose">-3.7%</td>
+        </tr><tr>
+          <td>2022-04</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/60d</code></td>
+          <td class="num">10</td>
+          <td class="num">80%</td>
+          <td class="num">3</td>
+          <td class="num lose">-29.3%</td>
+        </tr><tr>
+          <td>2022-05</td>
+          <td><code>30d/sub$1.5/$1.50-$2.00/+10%/90d</code></td>
+          <td class="num">5</td>
+          <td class="num">80%</td>
+          <td class="num">0</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2022-06</td>
+          <td><code>45d/sub$2.0/$2.00-$2.50/+10%/60d</code></td>
+          <td class="num">5</td>
+          <td class="num">80%</td>
+          <td class="num">2</td>
+          <td class="num win">+8.0%</td>
+        </tr><tr>
+          <td>2022-07</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/60d</code></td>
+          <td class="num">18</td>
+          <td class="num">83%</td>
+          <td class="num">7</td>
+          <td class="num lose">-8.3%</td>
+        </tr><tr>
+          <td>2022-08</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/60d</code></td>
+          <td class="num">22</td>
+          <td class="num">86%</td>
+          <td class="num">15</td>
+          <td class="num lose">-0.9%</td>
+        </tr><tr>
+          <td>2022-09</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/90d</code></td>
+          <td class="num">33</td>
+          <td class="num">82%</td>
+          <td class="num">4</td>
+          <td class="num win">+1.3%</td>
+        </tr><tr>
+          <td>2022-10</td>
+          <td><code>—</code></td>
+          <td class="num">0</td>
+          <td class="num">—</td>
+          <td class="num">0</td>
+          <td class="num ">—</td>
+        </tr><tr>
+          <td>2022-11</td>
+          <td><code>30d/sub$2.0/$2.00-$2.50/+10%/30d</code></td>
+          <td class="num">23</td>
+          <td class="num">83%</td>
+          <td class="num">15</td>
+          <td class="num lose">-2.6%</td>
+        </tr><tr>
+          <td>2022-12</td>
+          <td><code>30d/sub$2.0/$2.00-$2.50/+10%/60d</code></td>
+          <td class="num">23</td>
+          <td class="num">87%</td>
+          <td class="num">9</td>
+          <td class="num win">+2.5%</td>
+        </tr><tr>
+          <td>2023-01</td>
+          <td><code>30d/sub$1.5/$1.50-$2.00/+10%/60d</code></td>
+          <td class="num">25</td>
+          <td class="num">92%</td>
+          <td class="num">19</td>
+          <td class="num win">+3.4%</td>
+        </tr><tr>
+          <td>2023-02</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/90d</code></td>
+          <td class="num">54</td>
+          <td class="num">87%</td>
+          <td class="num">15</td>
+          <td class="num lose">-4.7%</td>
+        </tr><tr>
+          <td>2023-03</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/90d</code></td>
+          <td class="num">54</td>
+          <td class="num">81%</td>
+          <td class="num">3</td>
+          <td class="num lose">-7.6%</td>
+        </tr><tr>
+          <td>2023-04</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/90d</code></td>
+          <td class="num">48</td>
+          <td class="num">81%</td>
+          <td class="num">13</td>
+          <td class="num win">+3.2%</td>
+        </tr><tr>
+          <td>2023-05</td>
+          <td><code>30d/sub$1.5/$1.50-$2.00/+10%/90d</code></td>
+          <td class="num">15</td>
+          <td class="num">93%</td>
+          <td class="num">18</td>
+          <td class="num win">+3.5%</td>
+        </tr><tr>
+          <td>2023-06</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/90d</code></td>
+          <td class="num">41</td>
+          <td class="num">90%</td>
+          <td class="num">17</td>
+          <td class="num lose">-1.5%</td>
+        </tr><tr>
+          <td>2023-07</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/90d</code></td>
+          <td class="num">55</td>
+          <td class="num">85%</td>
+          <td class="num">16</td>
+          <td class="num lose">-7.9%</td>
+        </tr><tr>
+          <td>2023-08</td>
+          <td><code>30d/sub$2.0/$2.00-$2.50/+10%/60d</code></td>
+          <td class="num">56</td>
+          <td class="num">80%</td>
+          <td class="num">9</td>
+          <td class="num win">+5.3%</td>
+        </tr><tr>
+          <td>2023-09</td>
+          <td><code>30d/sub$1.5/$1.50-$2.00/+10%/90d</code></td>
+          <td class="num">32</td>
+          <td class="num">91%</td>
+          <td class="num">8</td>
+          <td class="num win">+2.5%</td>
+        </tr><tr>
+          <td>2023-10</td>
+          <td><code>30d/sub$1.5/$1.50-$2.00/+10%/90d</code></td>
+          <td class="num">28</td>
+          <td class="num">89%</td>
+          <td class="num">4</td>
+          <td class="num lose">-11.2%</td>
+        </tr><tr>
+          <td>2023-11</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/90d</code></td>
+          <td class="num">29</td>
+          <td class="num">86%</td>
+          <td class="num">23</td>
+          <td class="num win">+3.9%</td>
+        </tr><tr>
+          <td>2023-12</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/90d</code></td>
+          <td class="num">42</td>
+          <td class="num">86%</td>
+          <td class="num">40</td>
+          <td class="num win">+6.2%</td>
+        </tr><tr>
+          <td>2024-01</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/60d</code></td>
+          <td class="num">75</td>
+          <td class="num">92%</td>
+          <td class="num">18</td>
+          <td class="num win">+2.2%</td>
+        </tr><tr>
+          <td>2024-02</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/60d</code></td>
+          <td class="num">81</td>
+          <td class="num">89%</td>
+          <td class="num">31</td>
+          <td class="num win">+1.9%</td>
+        </tr><tr>
+          <td>2024-03</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/60d</code></td>
+          <td class="num">89</td>
+          <td class="num">89%</td>
+          <td class="num">28</td>
+          <td class="num lose">-2.3%</td>
+        </tr><tr>
+          <td>2024-04</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/90d</code></td>
+          <td class="num">77</td>
+          <td class="num">82%</td>
+          <td class="num">12</td>
+          <td class="num lose">-9.0%</td>
+        </tr><tr>
+          <td>2024-05</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/90d</code></td>
+          <td class="num">71</td>
+          <td class="num">80%</td>
+          <td class="num">24</td>
+          <td class="num win">+1.7%</td>
+        </tr><tr>
+          <td>2024-06</td>
+          <td><code>60d/sub$2.0/$2.00-$3.00/+10%/90d</code></td>
+          <td class="num">45</td>
+          <td class="num">80%</td>
+          <td class="num">6</td>
+          <td class="num lose">-7.3%</td>
+        </tr><tr>
+          <td>2024-07</td>
+          <td><code>30d/sub$1.5/$1.50-$2.00/+10%/60d</code></td>
+          <td class="num">29</td>
+          <td class="num">83%</td>
+          <td class="num">14</td>
+          <td class="num lose">-4.4%</td>
+        </tr><tr>
+          <td>2024-08</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/90d</code></td>
+          <td class="num">59</td>
+          <td class="num">81%</td>
+          <td class="num">12</td>
+          <td class="num win">+2.2%</td>
+        </tr><tr>
+          <td>2024-09</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/90d</code></td>
+          <td class="num">47</td>
+          <td class="num">81%</td>
+          <td class="num">24</td>
+          <td class="num win">+2.2%</td>
+        </tr><tr>
+          <td>2024-10</td>
+          <td><code>30d/sub$2.0/$2.00-$2.50/+10%/90d</code></td>
+          <td class="num">58</td>
+          <td class="num">86%</td>
+          <td class="num">31</td>
+          <td class="num lose">-4.5%</td>
+        </tr><tr>
+          <td>2024-11</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/90d</code></td>
+          <td class="num">68</td>
+          <td class="num">84%</td>
+          <td class="num">30</td>
+          <td class="num win">+4.2%</td>
+        </tr><tr>
+          <td>2024-12</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/90d</code></td>
+          <td class="num">86</td>
+          <td class="num">87%</td>
+          <td class="num">45</td>
+          <td class="num lose">-2.9%</td>
+        </tr><tr>
+          <td>2025-01</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/60d</code></td>
+          <td class="num">107</td>
+          <td class="num">83%</td>
+          <td class="num">26</td>
+          <td class="num win">+0.6%</td>
+        </tr><tr>
+          <td>2025-02</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/60d</code></td>
+          <td class="num">101</td>
+          <td class="num">85%</td>
+          <td class="num">13</td>
+          <td class="num lose">-13.3%</td>
+        </tr><tr>
+          <td>2025-03</td>
+          <td><code>45d/sub$2.0/$2.00-$3.00/+10%/90d</code></td>
+          <td class="num">67</td>
+          <td class="num">84%</td>
+          <td class="num">9</td>
+          <td class="num win">+8.0%</td>
+        </tr><tr>
+          <td>2025-04</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/90d</code></td>
+          <td class="num">52</td>
+          <td class="num">85%</td>
+          <td class="num">14</td>
+          <td class="num win">+8.0%</td>
+        </tr><tr>
+          <td>2025-05</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/90d</code></td>
+          <td class="num">40</td>
+          <td class="num">88%</td>
+          <td class="num">53</td>
+          <td class="num win">+4.2%</td>
+        </tr><tr>
+          <td>2025-06</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/90d</code></td>
+          <td class="num">80</td>
+          <td class="num">95%</td>
+          <td class="num">49</td>
+          <td class="num win">+6.0%</td>
+        </tr><tr>
+          <td>2025-07</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/90d</code></td>
+          <td class="num">116</td>
+          <td class="num">94%</td>
+          <td class="num">63</td>
+          <td class="num win">+1.4%</td>
+        </tr><tr>
+          <td>2025-08</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/90d</code></td>
+          <td class="num">165</td>
+          <td class="num">90%</td>
+          <td class="num">27</td>
+          <td class="num win">+7.1%</td>
+        </tr><tr>
+          <td>2025-09</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/90d</code></td>
+          <td class="num">139</td>
+          <td class="num">90%</td>
+          <td class="num">55</td>
+          <td class="num win">+0.4%</td>
+        </tr><tr>
+          <td>2025-10</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/90d</code></td>
+          <td class="num">145</td>
+          <td class="num">87%</td>
+          <td class="num">52</td>
+          <td class="num lose">-9.7%</td>
+        </tr><tr>
+          <td>2025-11</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/90d</code></td>
+          <td class="num">134</td>
+          <td class="num">83%</td>
+          <td class="num">13</td>
+          <td class="num win">+8.0%</td>
+        </tr><tr>
+          <td>2025-12</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/90d</code></td>
+          <td class="num">120</td>
+          <td class="num">82%</td>
+          <td class="num">22</td>
+          <td class="num lose">-2.9%</td>
+        </tr><tr>
+          <td>2026-01</td>
+          <td><code>30d/sub$2.0/$2.00-$2.50/+10%/90d</code></td>
+          <td class="num">84</td>
+          <td class="num">81%</td>
+          <td class="num">35</td>
+          <td class="num win">+3.1%</td>
+        </tr><tr>
+          <td>2026-02</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/60d</code></td>
+          <td class="num">72</td>
+          <td class="num">90%</td>
+          <td class="num">18</td>
+          <td class="num lose">-0.1%</td>
+        </tr><tr>
+          <td>2026-03</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/60d</code></td>
+          <td class="num">77</td>
+          <td class="num">88%</td>
+          <td class="num">30</td>
+          <td class="num win">+2.5%</td>
+        </tr><tr>
+          <td>2026-04</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/60d</code></td>
+          <td class="num">85</td>
+          <td class="num">89%</td>
+          <td class="num">26</td>
+          <td class="num lose">-5.4%</td>
+        </tr><tr>
+          <td>2026-05</td>
+          <td><code>30d/sub$2.0/$2.00-$3.00/+10%/60d</code></td>
+          <td class="num">74</td>
+          <td class="num">81%</td>
+          <td class="num">39</td>
+          <td class="num lose">-2.8%</td>
+        </tr><tr>
+          <td>2026-06</td>
+          <td><code>30d/sub$1.5/$2.00-$3.00/+10%/30d</code></td>
+          <td class="num">10</td>
+          <td class="num">90%</td>
+          <td class="num">1</td>
+          <td class="num win">+8.0%</td>
+        </tr></table>
+  </div>
+
+  <footer>
+    Wide grid: 3 cons × 3 sub_levels × 10 entry_ranges × 5 TPs × 3 holds.
+    Selection: win_rate ≥ 80% AND N ≥ 5; tiebreaker = win_rate × √N.
+    Stooq archive — yfinance not used.
+  </footer>
+</div></body></html>
