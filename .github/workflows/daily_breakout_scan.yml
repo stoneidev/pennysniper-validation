@@ -84,6 +84,17 @@ jobs:
       - name: Regenerate positions report
         run: python scripts/live/positions_report.py
 
+      - name: Telegram notification
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          if [ -n "${{ github.event.inputs.as_of_date }}" ]; then
+            python scripts/live/telegram_notify.py --as-of "${{ github.event.inputs.as_of_date }}"
+          else
+            python scripts/live/telegram_notify.py
+          fi
+
       - name: Show today's report
         run: |
           DATE=$(date -u +%Y-%m-%d)

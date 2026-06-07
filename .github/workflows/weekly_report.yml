@@ -38,6 +38,12 @@ jobs:
       - name: Regenerate positions report
         run: python scripts/live/positions_report.py
 
+      - name: Telegram weekly notification
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python scripts/live/telegram_weekly.py
+
       - name: Commit weekly report
         run: |
           git config user.email "github-actions[bot]@users.noreply.github.com"
