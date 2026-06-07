@@ -81,6 +81,9 @@ jobs:
             python scripts/live/daily_report.py
           fi
 
+      - name: Regenerate positions report
+        run: python scripts/live/positions_report.py
+
       - name: Show today's report
         run: |
           DATE=$(date -u +%Y-%m-%d)

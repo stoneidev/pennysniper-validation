@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Positions & P&L — PennySniper</title>
+  <style>
+:root {
+  --bg:#0f1115; --panel:#181b22; --panel-2:#1f232c; --border:#2a2f3a;
+  --text:#e8e8ea; --muted:#8b93a7; --accent:#4f8cff;
+  --green:#1fbf75; --red:#ff5b6c; --yellow:#f5b342;
+}
+* { box-sizing: border-box; }
+body { margin:0; padding:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  background:var(--bg); color:var(--text); line-height:1.5; }
+.container { max-width:1080px; margin:0 auto; padding:32px 20px 80px; }
+header { padding-bottom:24px; border-bottom:1px solid var(--border); margin-bottom:28px; }
+h1 { margin:0 0 6px; font-size:26px; font-weight:700; }
+h2 { margin:0 0 14px; font-size:16px; font-weight:600; }
+.sub { color:var(--muted); font-size:13px; }
+.nav { margin-top:14px; }
+.nav a { display:inline-block; margin-right:12px; color:var(--accent); text-decoration:none; font-size:13px; }
+.nav a:hover { text-decoration:underline; }
+.card { background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:20px; margin-bottom:20px; }
+.stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+.stat { background:var(--panel-2); border-radius:8px; padding:14px; }
+.stat .label { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; }
+.stat .value { font-size:22px; font-weight:700; margin-top:4px; font-variant-numeric:tabular-nums; }
+.stat .value.green { color:var(--green); }
+.stat .value.red { color:var(--red); }
+.stat .small { font-size:11px; color:var(--muted); margin-top:4px; }
+
+table { width:100%; border-collapse:collapse; }
+th, td { padding:10px 12px; text-align:left; border-bottom:1px solid var(--border); font-size:13px; }
+th { background:var(--panel-2); color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; font-size:11px; font-weight:600; }
+td.num { text-align:right; font-variant-numeric:tabular-nums; }
+td.sym { font-weight:700; font-family:"SF Mono",Menlo,Consolas,monospace; }
+td.win { color:var(--green); font-weight:600; }
+td.lose { color:var(--red); font-weight:600; }
+td.muted { color:var(--muted); }
+
+.tag { display:inline-block; padding:2px 8px; background:var(--panel-2); border:1px solid var(--border); border-radius:4px; font-size:11px; color:var(--muted); margin-right:4px; }
+.pill { display:inline-block; padding:3px 10px; border-radius:999px; font-size:11px; font-weight:600; }
+.pill.green { background:rgba(31,191,117,0.15); color:var(--green); }
+.pill.red { background:rgba(255,91,108,0.15); color:var(--red); }
+.pill.yellow { background:rgba(245,179,66,0.15); color:var(--yellow); }
+.pill.muted { background:rgba(139,147,167,0.15); color:var(--muted); }
+.pill.blue { background:rgba(79,140,255,0.15); color:var(--accent); }
+
+footer { margin-top:40px; padding-top:20px; border-top:1px solid var(--border); color:var(--muted); font-size:11px; line-height:1.6; }
+
+svg.curve { width:100%; height:200px; }
+.curve-grid { stroke:var(--border); stroke-width:1; }
+.curve-line { stroke:var(--green); stroke-width:2; fill:none; }
+.curve-point { fill:var(--green); }
+
+.empty { text-align:center; color:var(--muted); padding:32px 0; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>Positions & P&L</h1>
+    <div class="sub">Tracking your actual buys/sells against the system signals. Generated 2026-06-07T21:19:49.482051</div>
+    <div class="nav">
+      <a href="./index.html">← All reports</a>
+      <a href="https://github.com/stoneidev/pennysniper-validation">GitHub</a>
+    </div>
+  </header>
+
+  <div class="card">
+    <h2>Cumulative (closed trades only)</h2>
+    <div class="stats-grid">
+      <div class="stat"><div class="label">Closed trades</div>
+        <div class="value">0</div></div>
+      <div class="stat"><div class="label">Win rate</div>
+        <div class="value muted">0.0%</div></div>
+      <div class="stat"><div class="label">Mean P&L</div>
+        <div class="value muted">+0.00%</div></div>
+      <div class="stat"><div class="label">Realized KRW</div>
+        <div class="value muted">₩+0</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Capital curve — ₩1M with 25% allocation, sequential</h2>
+    <div class="empty">No closed trades to plot.</div>
+    <div style="text-align:right; color:var(--muted); font-size:11px; margin-top:8px;">
+      Final: ₩1,000,000 (+0.0%)
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Open Positions (0)</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th><th>Symbol</th><th>Buy Date</th>
+          <th class="num">Buy</th><th class="num">Shares</th>
+          <th class="num">Current</th><th class="num">Unrealized</th>
+          <th class="num">TP</th><th>Status</th>
+        </tr>
+      </thead>
+      <tbody><tr><td colspan="9" class="empty">No open positions.</td></tr>
+      </tbody>
+    </table>
+    
+  </div>
+
+  <div class="card">
+    <h2>Closed History (0)</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th><th>Symbol</th><th>Buy</th><th>Sell</th>
+          <th class="num">Buy $</th><th class="num">Sell $</th>
+          <th class="num">P&L %</th><th class="num">P&L KRW</th>
+          <th>Reason</th>
+        </tr>
+      </thead>
+      <tbody><tr><td colspan="9" class="empty">No closed trades yet.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Missed Signals (signal fired but no trade recorded)</h2>
+    <div class="sub" style="margin-bottom:12px;">
+      Signals from <code>reports/*.html</code> that have no corresponding buy in positions.json.
+      Useful for paper-tracking opportunities you skipped.
+    </div>
+    <table>
+      <thead>
+        <tr><th>Signal Date</th><th>Symbol</th><th class="num">Latest Close</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2026-06-01</td>
+          <td class="sym">TGHL</td>
+          <td class="num">$0.60</td>
+        </tr>
+        <tr>
+          <td>2026-06-01</td>
+          <td class="sym">NTCL</td>
+          <td class="num">$2.10</td>
+        </tr>
+        <tr>
+          <td>2026-05-27</td>
+          <td class="sym">RKTO</td>
+          <td class="num">$1.51</td>
+        </tr>
+        <tr>
+          <td>2026-05-15</td>
+          <td class="sym">HCWB</td>
+          <td class="num">$1.63</td>
+        </tr>
+        <tr>
+          <td>2026-05-13</td>
+          <td class="sym">QUCY</td>
+          <td class="num">$2.20</td>
+        </tr>
+        <tr>
+          <td>2026-05-12</td>
+          <td class="sym">BZFD</td>
+          <td class="num">$1.40</td>
+        </tr>
+        <tr>
+          <td>2025-05-28</td>
+          <td class="sym">ONDS</td>
+          <td class="num">$10.43</td>
+        </tr>
+        <tr>
+          <td>2025-05-22</td>
+          <td class="sym">NBP</td>
+          <td class="num">$1.64</td>
+        </tr>
+        <tr>
+          <td>2025-05-08</td>
+          <td class="sym">JBDI</td>
+          <td class="num">$0.52</td>
+        </tr>
+        <tr>
+          <td>2025-05-08</td>
+          <td class="sym">CTMX</td>
+          <td class="num">$3.00</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer>
+    Auto-generated from <code>data/positions.json</code>.
+    Use <code>scripts/live/positions.py</code> to record buys/sells.
+    KRW values use FX 1 USD = 1,400 KRW unless overridden per trade.
+  </footer>
+</div>
+</body>
+</html>

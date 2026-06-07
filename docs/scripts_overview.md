@@ -41,6 +41,8 @@
 | `monthly_retrain.py` | 매월 1일 (auto) | 직전 3개월 데이터로 룰 그리드 search | [link](#monthly_retrainpy) |
 | **`daily_report.py`** | **매 평일 (GH Action)** | **시그널 탐지 + HTML 리포트** | **[full guide](daily_report_guide.md)** |
 | `weekly_report.py` | 매 토요일 (GH Action) | 주간 종합 + 시장 인사이트 | [link](#weekly_reportpy) |
+| `positions.py` | 수동 (CLI) | 매수/매도 기록 (`data/positions.json`) | [link](#positionspy) |
+| `positions_report.py` | 매 평일/주말 (auto) | 포지션 HTML 리포트 생성 | [link](#positions_reportpy) |
 | `import_stooq_cache.py` | 1회 (수동) | Stooq 로컬 데이터 → daily_cache | [link](#import_stooq_cachepy) |
 | `generate_may_reports.py` | 1회 (수동) | 5월 2025 backfill | helper |
 | `generate_may_2026_reports.py` | 1회 (수동) | 5월 2026 backfill | helper |
@@ -183,6 +185,71 @@ if cum_total_pct < 0:
 ```bash
 python scripts/live/weekly_report.py
 ```
+
+---
+
+## positions.py
+
+**Inputs:** CLI args + `config/current_rule.json` (for context)
+**Outputs:** `data/positions.json` (single source of truth)
+
+**Commands:**
+```
+buy SYMBOL  --price X  --shares N  [--date YYYY-MM-DD] [--note] [--fx KRW_RATE]
+sell SYMBOL --price X  --reason {tp_hit|time_exit|stop_loss|manual}
+status               # current open + cumulative
+list  [--all]
+cancel SYMBOL        # remove an unexecuted open
+edit ID FIELD VALUE  # fix typos
+```
+
+**positions.json 형식:**
+```json
+{
+  "positions": [
+    {
+      "id": "20260602-NTCL",
+      "symbol": "NTCL",
+      "buy_date": "2026-06-02",
+      "buy_price": 1.02,
+      "shares": 100,
+      "cost_krw": 142800,
+      "rule_used": "60d/$1.20-$1.50/+50%/30d",
+      "tp_target": 1.53,
+      "max_hold_until": "2026-07-17",
+      "notes": "6/1 signal",
+      "sell_date": "2026-06-03",
+      "sell_price": 1.53,
+      "exit_reason": "tp_hit",
+      "realized_pnl_pct": 0.5,
+      "realized_pnl_krw": 71400
+    }
+  ]
+}
+```
+
+**ID 규칙:** `YYYYMMDD-SYMBOL` (같은 날 같은 종목 중복 시 `-2`, `-3` 자동 부여)
+
+**KRW 환산:** 기본 1 USD = 1,400 KRW. `--fx 1380` 같이 override 가능.
+
+---
+
+## positions_report.py
+
+**Inputs:** `data/positions.json` + `data/daily_cache/*.csv` + `reports/*.html`
+**Outputs:** `reports/_positions.html`
+
+**섹션:**
+1. Cumulative stats (4-card)
+2. Capital curve SVG (₩1M, 25% allocation, sequential)
+3. Open positions table (현재가, 미실현 P&L, TP 거리, status pill)
+4. Closed history (실현 P&L, exit reason)
+5. Missed signals (`reports/*.html`에 떴지만 `positions.json`에 없는 (date, symbol))
+
+**Missed signals 매칭 logic:**
+- 시그널 (date, sym)
+- 거래 (date, sym) AND (date-1, sym) 둘 다 매칭 시도
+- 둘 다 없으면 missed로 분류
 
 ---
 

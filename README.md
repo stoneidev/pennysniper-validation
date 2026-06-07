@@ -244,6 +244,43 @@ WARRANT_EXCLUSION = True       # auto-applied
 
 ---
 
+## Position Tracking
+
+실제 매수/매도를 기록하고 시그널 대비 성과를 추적할 수 있습니다.
+
+### CLI
+
+```bash
+# 매수 기록
+python scripts/live/positions.py buy NTCL --price 1.02 --shares 100 \
+  --date 2026-06-02 --note "6/1 signal"
+
+# 매도 기록 (reason: tp_hit | time_exit | stop_loss | manual)
+python scripts/live/positions.py sell NTCL --price 1.53 --reason tp_hit
+
+# 현재 상태 (열린 포지션 + 누적 통계)
+python scripts/live/positions.py status
+
+# HTML 리포트 갱신
+python scripts/live/positions_report.py
+open reports/_positions.html
+```
+
+### 리포트 내용 (`reports/_positions.html`)
+
+- 누적 통계 (승률, 평균 P&L, 실현 손익 KRW)
+- 자본 곡선 SVG (₩1M에서 25% allocation 시뮬레이션)
+- 열린 포지션 테이블 (현재가, 미실현 P&L, TP 거리, holding days)
+- 닫힌 포지션 history
+- Missed signals (시그널이 떴는데 매수 안 한 종목들)
+
+### 자동 갱신
+
+매 평일 daily scan과 매주 토요일 weekly report 시 자동 재생성됩니다.
+`data/positions.json` 만 직접/CLI로 수정하면 됩니다.
+
+---
+
 ## Reproducing Past Reports
 
 May 2025, May 2026, June 2026 리포트 모두 재생성 가능:

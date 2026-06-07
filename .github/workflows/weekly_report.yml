@@ -35,6 +35,9 @@ jobs:
       - name: Generate weekly report
         run: python scripts/live/weekly_report.py
 
+      - name: Regenerate positions report
+        run: python scripts/live/positions_report.py
+
       - name: Commit weekly report
         run: |
           git config user.email "github-actions[bot]@users.noreply.github.com"
