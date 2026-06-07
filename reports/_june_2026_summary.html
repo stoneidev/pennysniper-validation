@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>June 2026 — Breakout Summary (Option A, 1-5 only)</title><style>
+<title>June 2026 — Breakout Summary (Narrow Rule, 1-5 only)</title><style>
 :root{--bg:#0f1115;--panel:#181b22;--panel-2:#1f232c;--border:#2a2f3a;--text:#e8e8ea;--muted:#8b93a7;--accent:#4f8cff;--green:#1fbf75;--red:#ff5b6c;--yellow:#f5b342;}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
 .container{max-width:1080px;margin:0 auto;padding:32px 20px 80px}
@@ -26,37 +26,36 @@ footer{margin-top:40px;padding-top:20px;border-top:1px solid var(--border);color
 </style></head>
 <body><div class="container">
   <header>
-    <h1>June 2026 — Breakout Summary (Option A, 1-5 only)</h1>
-    <div class="sub">Aggregated outcome of all signals from this period.</div>
+    <h1>June 2026 — Breakout Summary (Narrow Rule, 1-5 only)</h1>
+    <div class="sub">Honest P&amp;L — every signal resolved (TP / max-hold / current close).</div>
     <div class="nav">
       <a href="./index.html">← All reports</a>
       <a href="https://github.com/stoneidev/pennysniper-validation">GitHub</a>
     </div>
   </header>
   <div class="card">
-    <h2>Active Rule (Option A — wide grid + strict filter)</h2>
+    <h2>Active Rule (narrow, low-entry)</h2>
     <div class="kv">
-      <div class="k">Consolidation</div><div class="v">30 trading days all closed &lt; $1.50</div>
-      <div class="k">Entry range</div><div class="v">$2.00 – $3.00</div>
-      <div class="k">Take profit</div><div class="v">+30% (entry × 1.30)</div>
-      <div class="k">Max hold</div><div class="v">60 trading days</div>
+      <div class="k">Consolidation</div><div class="v">60 trading days all closed &lt; $1.00</div>
+      <div class="k">Entry range</div><div class="v">$1.20 – $1.50</div>
+      <div class="k">Take profit</div><div class="v">+50% (entry × 1.50)</div>
+      <div class="k">Max hold</div><div class="v">30 trading days</div>
       <div class="k">Slippage</div><div class="v">2% round-trip</div>
     </div>
     <div style="margin-top:14px">
       <span class="tag">trained on 2026-03-01_2026-06-01</span>
-      <span class="tag">train N = 10</span>
-      <span class="tag">train win 80%</span>
-      <span class="tag">train mean +13.4%</span>
+      <span class="tag">train N = 3</span>
+      <span class="tag">train win 100%</span>
     </div>
   </div>
 
   <div class="card">
-    <h2>Aggregate Stats (closed only)</h2>
+    <h2>Aggregate Stats (1 still open, valued at last close)</h2>
     <div class="stats-grid">
-      <div class="stat"><div class="label">Total signals</div><div class="value">1</div></div>
-      <div class="stat"><div class="label">Closed</div><div class="value">0</div></div>
-      <div class="stat"><div class="label">TP +30% hit</div><div class="value ">0%</div></div>
-      <div class="stat"><div class="label">Mean net</div><div class="value ">+0.0%</div></div>
+      <div class="stat"><div class="label">Signals</div><div class="value">2</div></div>
+      <div class="stat"><div class="label">Win rate</div><div class="value ">50%</div></div>
+      <div class="stat"><div class="label">TP +50% hit</div><div class="value green">50%</div></div>
+      <div class="stat"><div class="label">Mean net</div><div class="value green">+3.9%</div></div>
     </div>
   </div>
 
@@ -70,25 +69,36 @@ footer{margin-top:40px;padding-top:20px;border-top:1px solid var(--border);color
       </tr></thead>
       <tbody>
         <tr>
+          <td>2026-06-01</td>
+          <td class="sym">NTCL</td>
           <td>2026-06-02</td>
-          <td class="sym">LASE</td>
+          <td class="num">$1.20</td>
           <td>2026-06-03</td>
-          <td class="num">$3.52</td>
-          <td>still in flight</td>
-          <td class="num">—</td>
-          <td>—</td>
-          <td class="num">—</td>
-          <td class="num "><span class="tag">in flight</span></td>
+          <td class="num">$1.80</td>
+          <td>✓ <span class="tag">TP</span></td>
+          <td class="num">2</td>
+          <td class="num win">+48.0%</td>
+        </tr>
+        <tr>
+          <td>2026-06-01</td>
+          <td class="sym">TGHL</td>
+          <td>2026-06-02</td>
+          <td class="num">$0.97</td>
+          <td>2026-06-05</td>
+          <td class="num">$0.60</td>
+          <td>✗ <span class="tag">still open</span></td>
+          <td class="num">4</td>
+          <td class="num lose">-40.2%</td>
         </tr></tbody>
     </table>
   </div>
 
   <div class="card">
-    <h2>₩1,000,000 Simulation (25% allocation, closed)</h2>
+    <h2>₩1,000,000 Simulation (25% allocation, sequential)</h2>
     <div class="stats-grid">
       <div class="stat"><div class="label">Initial</div><div class="value">₩1,000,000</div></div>
-      <div class="stat"><div class="label">Final</div><div class="value ">₩1,000,000</div></div>
-      <div class="stat"><div class="label">Return</div><div class="value ">+0.0%</div></div>
+      <div class="stat"><div class="label">Final</div><div class="value green">₩1,007,486</div></div>
+      <div class="stat"><div class="label">Return</div><div class="value green">+0.7%</div></div>
       <div class="stat"><div class="label">Period</div><div class="value">June 2026 (1-5)</div></div>
     </div>
   </div>
@@ -103,7 +113,5 @@ footer{margin-top:40px;padding-top:20px;border-top:1px solid var(--border);color
 </ul>
   </div>
 
-  <footer>
-    Auto-generated. Past performance ≠ future. Slippage / taxes not fully modeled.
-  </footer>
+  <footer>Auto-generated. Past performance ≠ future. Slippage / taxes not fully modeled.</footer>
 </div></body></html>

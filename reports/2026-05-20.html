@@ -93,7 +93,7 @@ footer {
 <div class="container">
   <header>
     <h1>Breakout Daily Report — 2026-05-20</h1>
-    <div class="sub">Generated 2026-06-08T00:39:53.186363</div>
+    <div class="sub">Generated 2026-06-08T01:50:09.125420</div>
     <div class="nav">
       <a href="./index.html">← All reports</a>
       <a href="https://github.com/stoneidev/pennysniper-validation">GitHub repo</a>
@@ -104,11 +104,11 @@ footer {
     <h2>Active Rule</h2>
     <div class="kv">
       <div class="k">Consolidation</div>
-      <div class="v">prior <strong>60 trading days</strong> all closed below $1.00</div>
+      <div class="v">prior <strong>30 trading days</strong> all closed below $1.00</div>
       <div class="k">Entry range</div>
-      <div class="v">today close in <strong>[$2.00, $3.00)</strong></div>
+      <div class="v">today close in <strong>[$1.20, $1.50)</strong></div>
       <div class="k">Take profit</div>
-      <div class="v">entry × <strong>1.10</strong> ( +10% )</div>
+      <div class="v">entry × <strong>1.15</strong> ( +15% )</div>
       <div class="k">Max hold</div>
       <div class="v">30 trading days</div>
       <div class="k">Stop loss</div>
@@ -118,61 +118,19 @@ footer {
     </div>
     <div style="margin-top:14px; font-size:12px; color: var(--muted);">
       <span class="tag">trained on 2026-02-01_2026-05-01</span>
-      <span class="tag">N = 47</span>
-      <span class="tag">train win 80.9%</span>
-      <span class="tag">train mean +0.23%</span>
+      <span class="tag">N = 4</span>
+      <span class="tag">train win 100.0%</span>
+      <span class="tag">train mean +13.00%</span>
       <span class="tag">valid until 2026-05-31</span>
     </div>
   </div>
 
 
-    <div class="banner signal">
-      <div class="num">2</div>
-      <div class="text"><strong>NEW SIGNALS TODAY</strong><br>
-        Buy at next-day open, take profit at +10%, force-exit after 30 trading days.
+    <div class="banner empty">
+      <div class="num">0</div>
+      <div class="text"><strong>No new breakout signals today.</strong><br>
+        Universe scanned, no tickers matched the active rule.
       </div>
-    </div>
-
-    <div class="card">
-      <h2>Signals</h2>
-      <table class="signals">
-        <thead>
-          <tr>
-            <th>Symbol</th>
-            <th class="num">Today Close</th>
-            <th class="num">Prev Close</th>
-            <th class="num">Cons Avg</th>
-            <th class="num">TP Target</th>
-          </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <td class="sym">HCWB</td>
-          <td class="num">$2.43</td>
-          <td class="num">$1.06</td>
-          <td class="num">$0.50</td>
-          <td class="num target">$2.67</td>
-        </tr>
-
-        <tr>
-          <td class="sym">MTVA</td>
-          <td class="num">$2.89</td>
-          <td class="num">$1.88</td>
-          <td class="num">$1.42</td>
-          <td class="num target">$3.18</td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="card">
-      <h2>Trade Plan (per signal)</h2>
-      <ol class="steps">
-        <li>Place market <strong>BUY</strong> at the OPEN of the next trading day.</li>
-        <li>Immediately place a limit <strong>SELL</strong> at the TP target price (entry × 1.10).</li>
-        <li>If TP not hit within 30 trading days, force-sell at close on day 30.</li>
-        <li>Recommended position size: <strong>25% of cash</strong> per signal (max 4 simultaneous).</li>
-      </ol>
     </div>
 
 
