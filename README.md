@@ -1,246 +1,340 @@
-# PennySniper Validation
+# PennySniper — Adaptive Penny Stock Breakout Scanner
 
-> **나스닥 페니스탁 자동매매 PRD v3.0의 핵심 가설을 데이터로 검증한 일지**
-> 
-> "RL/KNN 기반 페니스탁 day trading"이라는 처음 가설에서 출발해서, 
-> 23개 가설을 정밀 검증한 후 **양수 알파 4가지를 발견**했습니다.
+> 매일 NASDAQ 페니스탁 universe를 자동 스캔, 매월 적응형으로 룰을 재최적화하는
+> 자동매매 시그널 시스템.
 
----
-
-## 📌 English Abstract
-
-This repository documents an iterative, data-driven validation of the
-PennySniper PRD v3.0 — an automated trading system designed for NASDAQ
-penny stock day trading using KNN clustering + PPO reinforcement learning.
-
-Through 23 independent hypotheses tested against real market data
-(Polygon SIP minute bars, Binance funding rates, ~169,500 daily
-penny-stock observations), the original day-trading premise was
-falsified. However, three durable alphas were discovered:
-
-1. **BTC funding-rate arbitrage** — +5% APY (decaying)
-2. **XRP −7%/1h mean-reversion** — +48% APY (true walk-forward)
-3. **Penny stock 30-60d consolidation breakout** — +1,681% APY in-sample
-   from Jan 2025 (pending OOS confirmation)
-
-Reinforcement learning, when applied with proper monthly walk-forward
-retraining, **destroyed alpha** (−999% APY) — confirming that simple
-domain-knowledge rules outperform complex models on sparse financial
-data.
+**Live**: https://stoneidev.github.io/pennysniper-validation/
 
 ---
 
-## 🎯 출발점
+## 🎯 What It Does
 
-원래 PRD v3.0의 핵심 가설:
-> "나스닥 페니스탁의 1분봉 OHLCV에서 거래량 + 모멘텀 패턴을
-> KNN으로 군집화하고 PPO 강화학습으로 진입/청산을 학습하면
-> 일반인 자본으로 양수 EV 자동매매가 가능하다"
+1. **매 평일** GitHub Action이 자동 실행:
+   - yfinance에서 NASDAQ 페니스탁 일봉 fetch (incremental)
+   - 현재 활성 룰로 시그널 탐지
+   - HTML 리포트 생성 → `reports/YYYY-MM-DD.html`
+   - GitHub Pages 자동 배포
 
-**결론: 위 가설은 거짓입니다.** 다만 검증 과정에서 진짜 작동하는 다른 알파를 발견했습니다.
+2. **매월 1일** 룰 재최적화:
+   - 직전 3개월 데이터로 그리드 서치
+   - `config/current_rule.json` 갱신
+   - 시장 환경 변화에 자동 적응
 
----
-
-## 🔬 검증 결과 요약 (23개 가설)
-
-### 1️⃣ 페니스탁 단기 자동매매 — 모두 음수 알파
-
-| # | 가설 | OOS 결과 |
-|---|---|---|
-| 1 | 거래량 폭발 후 다음날 매수 | gross −2.82% |
-| 2 | +100% 시점 진입 (1분봉 정밀) | gross −1.36% |
-| 3 | 18 feature univariate 신호 | Bonferroni 통과 0개 |
-| 4 | Logistic OOS 분류 | 알파 +0.6% (N=18 노이즈) |
-| 5 | Walk-forward learning curve | 학습할수록 악화 |
-| 6 | +30% 빠른 트리거 (clean) | gross −5.00% |
-| 7 | Oracle exit upper bound | N=6, 통계 무의미 |
-| 8 | 시간대별 패턴 | 알파 0% |
-| 9 | 거래량 군집 quintile | Cherry-picking 의심 |
-| 10 | 숏 전략 | gross +0.93% (비용에 무너짐) |
-| 11 | 펌프앤페이드 (숏) | gross **−24%** |
-| 12 | 갭 (spike-only sample) | +3.81% (selection bias) |
-| 13 | **갭 (full universe N=169,525)** | **gross −0.18%** ✓ |
-| 14 | Co-movement 테마 날 다음날 | 알파 +0.02%p (노이즈) |
-| 15 | Sector momentum spillover | 알파 +0.03%p (노이즈) |
-
-**결론**: 페니스탁 단기 자동매매에는 일반인이 OHLCV로 잡을 수 있는
-신뢰 가능한 알파가 거의 없음. Selection bias 통제 후 진짜 universe
-(169,525건) 평균 −0.18%, 비용 차감 시 −3.18%.
-
-### 2️⃣ 암호화폐 — 진짜 양수 알파 발견
-
-| # | 가설 | 결과 |
-|---|---|---|
-| 16 | **BTC Funding always-on hedge** | **+5.0% APY** ✅ |
-| 17 | BTC 1분봉 mean reversion | +4% APY |
-| 18 | XRP Funding always-on | +3.9% APY (효율화 중) |
-| 19 | **XRP −7% 1h mean reversion (naive)** | **+48% APY** ⭐ (true walk-forward) |
-| 20 | **XRP Q-learning RL walk-forward** | **−999% APY** ❌ |
-
-**결정적 발견**: 동일 데이터·동일 walk-forward에서 **단순 룰이 RL을 압도**.
-RL은 sparse reward와 non-stationary 시장에서 알파를 생성하지 못하고
-거래비용을 폭증시킴 (6,013건 거래 vs naive 21건).
-
-### 3️⃣ 페니스탁 Breakout — 의외의 양수 알파 ⭐
-
-당신의 직관적 가설("$1 미만에서 머문 페니스탁이 $1.5를 돌파하면
-이후 큰 상승")을 정밀 검증한 결과:
-
-| # | 조건 | N | 승률 | 거래당 평균 |
-|---|---|---|---|---|
-| 21 | 30d/45d/60d cons + $1.05~$1.20 돌파 | 25~37 | 73~89% | +20~177% |
-| 22 | **Mega-grid 최적 (30d cons / TP $3.0 / 90d horizon)** | 34 | **74%** | **+81%** |
-| 23 | 60d cons / TP $3.0 / 180d horizon | 21 | **91%** | **+114%** |
-
-**핵심 발견**:
-- $1.5+ 큰 돌파는 알파 없음 (당신 직감과 반대)
-- $1.05~$1.20 약한 돌파가 진짜 신호
-- TP $1.5 (낮음)는 너무 빨리 익절 → 큰 상승 놓침
-- **TP $3.0~$5.0 + 90~180일 hold**가 자본 성장 최적
-
-**Reverse split 함정 검증 완료**: yfinance `auto_adjust=True` 사용 +
-live `.splits` API 교차 확인 → **25개 시그널 모두 진짜 시장 움직임**
-(split artifact 0건).
+3. **매주 토요일** 주간 종합 리포트:
+   - 그 주의 모든 시그널 + 결과
+   - 자본 곡선, 누적 통계
+   - 시장 환경 분석
 
 ---
 
-## 💰 ₩1,000,000 시뮬레이션 (2025.01 ~ 2026.06, 17개월)
-
-같은 페니스탁 breakout 룰을 in-sample이지만 진짜 시장 데이터로 적용:
-
-| 전략 | 자본 운용 | 거래 수 | 승률 | **최종 자산** |
-|---|---|---|---|---|
-| 30d / TP $3.0 / 90d hold | ALL-IN | 5 | 74% | **₩61,489,186 (+6,049%)** |
-| 60d / TP $3.0 / 180d hold | ALL-IN | 4 | 78% | ₩27,141,381 (+2,614%) |
-| 30d / TP $3.0 / 90d hold | 25% per trade | 14 | 74% | ₩9,405,561 (+841%) |
-| 30d / TP $5.0 / 90d hold | 10% per trade | 18 | 74% | ₩4,100,822 (+310%) |
-
-**중요한 한계**:
-- In-sample (룰을 발견한 후 동일 데이터로 측정)
-- ALL-IN은 시그널 타이밍 운에 크게 의존
-- 한국 거주자 양도세 22% 미반영
-- 슬리피지 2% 가정 (실제 5~10% 가능)
-
-**현실적 권장**: 25% allocation으로 ₩1M → ~₩9M (+840%) 기대치를
-가지되 진짜 OOS는 paper trading 6개월 이상 필요.
-
----
-
-## 🎯 최종 발견된 알파 3종 (실전 진입 가능)
-
-### A. BTC Funding Rate Arbitrage
-- **방법**: BTC spot long + perpetual short (델타 뉴트럴)
-- **수익원**: 8시간마다 funding rate 수령
-- **2년 평균 APY**: +5.0% (수수료 차감 후)
-- **상태**: 알파 약화 중 (2024 +8% → 2026 +1%)
-
-### B. XRP −7% 1시간 Mean Reversion
-- **방법**: XRP 1시간 −7% 하락 시 매수, 4시간 후 청산
-- **2년 walk-forward APY**: +48%
-- **승률**: 86% (21건)
-- **상태**: 진짜 walk-forward에서도 양수, 빈도 낮음
-
-### C. 페니스탁 60d Breakout (가장 강한 알파)
-- **방법**: 60일 이상 $1 미만 → $1.05~$1.20 돌파 → 다음날 시초가 매수 → TP $3.0 또는 180일 close
-- **In-sample 승률**: 91%
-- **거래당 평균**: +114%
-- **상태**: **OOS 미검증** (in-sample 결과로 추정)
-- **빈도**: 연 12~15건 (2026년 빈도 감소 추세)
-
----
-
-## 📁 Repository 구조
+## 🏗️ Architecture
 
 ```
-pennysniper-validation/
-├── README.md                # 본 문서
-├── docs/
-│   ├── PRD_v3.0.md         # 원본 PRD (출발점)
-│   └── findings.md         # 23개 가설 상세 결과
-├── scripts/
-│   ├── pennysniper/        # 가설 1~15 (페니스탁 단기)
-│   ├── btc/                # 가설 16~17 (BTC)
-│   ├── xrp/                # 가설 18~20 (XRP)
-│   └── breakout/           # 가설 21~23 (breakout)
-├── results/
-│   ├── csv/                # 핵심 데이터 결과
-│   └── plots/              # 시각화
-├── requirements.txt
-├── LICENSE
-└── .gitignore              # 캐시·venv 제외
+                       ┌─────────────────────────┐
+                       │   GitHub Actions        │
+                       │   (cron + manual)       │
+                       └────────────┬────────────┘
+                                    │
+              ┌─────────────────────┼─────────────────────┐
+              │                     │                     │
+       Mon-Fri 06:00 UTC     1st of every month     Sat 06:00 UTC
+              │                     │                     │
+              ▼                     ▼                     ▼
+   ┌─────────────────┐    ┌─────────────────┐   ┌─────────────────┐
+   │ daily_breakout_ │    │ monthly_retrain │   │ weekly_report   │
+   │ scan.yml        │    │ (auto-trigger   │   │ .yml            │
+   │                 │    │  on day 1)      │   │                 │
+   └────────┬────────┘    └────────┬────────┘   └────────┬────────┘
+            │                      │                     │
+            ▼                      ▼                     ▼
+  ┌──────────────────┐   ┌──────────────────┐  ┌──────────────────┐
+  │ fetch_universe   │   │ monthly_retrain  │  │ weekly_report    │
+  │   .py            │   │   .py            │  │   .py            │
+  │ (incremental,    │   │ (3mo train       │  │ (aggregate week, │
+  │  ~3min)          │   │  → 1mo apply)    │  │  insights, HTML) │
+  └────────┬─────────┘   └────────┬─────────┘  └────────┬─────────┘
+           │                      │                     │
+           └──────────────────────┼─────────────────────┘
+                                  ▼
+                       ┌──────────────────────┐
+                       │ data/daily_cache/    │
+                       │ config/current_rule  │
+                       │ reports/*.html       │
+                       └──────────┬───────────┘
+                                  ▼
+                       ┌──────────────────────┐
+                       │ git commit + push    │
+                       │ GitHub Pages deploy  │
+                       └──────────────────────┘
 ```
+
+### Active Rule (auto-updated monthly)
+
+`config/current_rule.json` 예시:
+```json
+{
+  "cons_d": 60,
+  "entry_lo": 1.20,
+  "entry_hi": 1.50,
+  "tp_ratio": 1.50,
+  "hold_d": 30,
+  "valid_until": "2026-06-30",
+  "trained_on_period": "2026-03-01_2026-06-01",
+  "train_n": 3,
+  "train_win_rate": 1.0,
+  "train_mean_return": 0.48
+}
+```
+
+**룰 의미:**
+- 직전 60 trading days 종가 모두 < $1.00
+- 오늘 종가 $1.20~$1.50 사이로 **첫 돌파**
+- 다음날 시초가 매수
+- TP +50% 도달 시 즉시 매도
+- 30 trading days 내 미도달 시 강제 청산
 
 ---
 
-## 🚀 재현 방법
+## 🚀 Quick Start
+
+### Live system 보기 (아무 설정 없이)
+
+**https://stoneidev.github.io/pennysniper-validation/**
+
+### Local에서 직접 실행
 
 ```bash
-# 1. 환경 셋업
+# 1. clone
+git clone https://github.com/stoneidev/pennysniper-validation.git
+cd pennysniper-validation
+
+# 2. environment
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 
-# 2. 페니스탁 universe 다운로드 (~30분)
-python scripts/pennysniper/01_build_universe.py
-python scripts/pennysniper/02_find_events.py
+# 3. fetch universe (incremental — 대부분 캐시 활용, 2-3min)
+python scripts/live/fetch_universe.py
 
-# 3. BTC/XRP 데이터 (~10분)
-python scripts/btc/btc_01_setup.py
-python scripts/xrp/xrp_01_setup.py
+# 4. 현재 룰 확인 (config/current_rule.json 이미 commit되어 있음)
+cat config/current_rule.json
 
-# 4. Polygon 1분봉 (POLYGON_API_KEY 필요)
-export POLYGON_API_KEY=your_key
-python scripts/pennysniper/07_polygon_minute_resim.py
+# 5. 오늘 시그널 스캔 + HTML 리포트 생성
+python scripts/live/daily_report.py
 
-# 5. Breakout 메가 그리드 (마지막 발견)
-python scripts/breakout/breakout_09_mega_grid.py
+# 6. 결과 확인
+open reports/$(date +%Y-%m-%d).html
+```
+
+### 과거 특정 날짜 backtest
+
+```bash
+# 2025-05-08 시점 시그널 (look-ahead bias 없이)
+python scripts/live/daily_report.py --as-of 2025-05-08
+
+# 2025 Q2용 룰을 학습해서 적용
+python scripts/live/monthly_retrain.py --as-of 2025-04-15 --out config/rule_2025_q2.json
+python scripts/live/daily_report.py --as-of 2025-05-08 --rule-file config/rule_2025_q2.json
 ```
 
 ---
 
-## 🤝 핵심 교훈
+## 📂 Repository Structure
 
-1. **"빨리 벌고 싶다"는 욕구 자체가 가장 큰 알파 적**
-   - 페니스탁 day trading의 본질은 정보 격차 → 일반인 음수 EV
-   - 합리적 알파는 연 5~50% 수준
-
-2. **Selection bias가 모든 직관을 함정에 빠뜨림**
-   - "+100% 종목" "갭 작은데 폭등" 등 모두 사후 편향
-   - 진짜 universe에서 검증해야 진실 보임
-
-3. **단순 룰이 ML/RL을 OOS에서 압도**
-   - XRP에서 naive +48% APY vs Q-learning −999% APY
-   - 도메인 지식이 모델 capacity보다 중요
-
-4. **백테스트의 split artifact는 흔한 함정**
-   - yfinance `auto_adjust=True` + 거래량 검증 필수
-   - Live `.splits` API로 cross-check
-
-5. **검증 가능한 가설만 진짜 자산**
-   - 23개 중 4개만 양수 (17%)
-   - 나머지 19개는 학습 자료지만 거래에 쓰면 손실
+```
+pennysniper-validation/
+├── README.md                          ← 본 파일 (운영 시스템)
+├── docs/
+│   ├── validation_journey.md          ← 23개 가설 검증 일지 ⭐
+│   ├── findings.md                    ← 가설별 정밀 결과
+│   ├── rolling_adaptive_findings.md   ← 적응형 walk-forward 발견
+│   ├── optimal_rule_2026_watchlist.md ← 룰 최적화 과정
+│   ├── stooq_full_universe_findings.md ← Selection bias 검증
+│   ├── 2026_signals_watchlist.md      ← Warrant 함정 발견
+│   └── PRD_v3.0.md                    ← 원본 PRD (출발점, archive)
+├── scripts/
+│   ├── live/                          ← 운영 스크립트
+│   │   ├── fetch_universe.py
+│   │   ├── monthly_retrain.py
+│   │   ├── daily_report.py
+│   │   ├── weekly_report.py           ← 주간 종합 리포트
+│   │   ├── may_summary.py             ← 월간 종합 (helpers)
+│   │   ├── may_2026_summary.py
+│   │   ├── june_2026_summary.py
+│   │   └── README.md
+│   ├── breakout/                      ← 백테스트 코드 (검증 일지)
+│   ├── pennysniper/                   ← Phase 1 가설 1~15
+│   ├── btc/                           ← Phase 2 BTC 검증
+│   └── xrp/                           ← Phase 2 XRP 검증
+├── data/
+│   └── daily_cache/                   ← yfinance 일봉 캐시 (1,400+ tickers)
+├── config/
+│   ├── current_rule.json              ← 현재 활성 룰
+│   ├── rule_2025_q2.json              ← 과거 분기별 룰 (참고)
+│   └── rule_2026_q2.json
+├── reports/                           ← 자동 생성 HTML 리포트
+│   ├── index.html
+│   ├── YYYY-MM-DD.html                ← 일일
+│   ├── _MM_YYYY_summary.html          ← 월간
+│   └── _weekly_YYYY-WW.html           ← 주간
+├── results/                           ← 백테스트 raw 결과
+│   ├── csv/
+│   └── plots/
+└── .github/workflows/
+    ├── daily_breakout_scan.yml        ← 평일 자동 실행
+    └── weekly_report.yml              ← 토요일 주간 리포트
+```
 
 ---
 
-## ⚠️ 면책
+## 📊 Performance (Backtest)
 
-이 repository는 **개인 학습/연구 목적**입니다.
-- 실제 투자 권유 아님
-- 결과는 in-sample 또는 짧은 OOS 기간
-- 알파 약화 추세 진행 중 (특히 BTC/XRP)
-- 한국 거주자 세금 (양도세 22%) 미반영
-- 거래소 리스크, 슬리피지, 강제청산 등 미반영
+**핵심 룰 (현재 운영 중인 monthly retrain)**:
+- OOS 거래: 70 trades (38 monthly windows, 2023.04 ~ 2026.05)
+- 승률: **87%**
+- 평균 거래당: **+20.6%**
+- p10 (최악): −13.1%
+- p90 (최고): +48%
 
-**과거 성과는 미래 성과를 보장하지 않습니다.**
+**₩1,000,000 시뮬레이션 (25% allocation)**:
+- 38개월 후: **₩28,487,139 (+2,749%)**
+- 연환산: ~+150% APY (in-sample)
+
+**다른 재학습 주기 비교**:
+
+| 방법 | OOS APY | ₩1M → 결과 |
+|---|---|---|
+| Quarterly (3mo→3mo) | +1,768% | ₩18.7M |
+| **Monthly (3mo→1mo)** ⭐ | **+2,749%** | **₩28.5M** |
+| Daily (60d→1d) | +3,133% | ₩32.3M |
+
+> ⚠️ **현실 기대치**: 슬리피지 (실제 5-10%) + 한국 양도세 22% + 시장 효율화 반영 시
+> 보수적으로 연 +30~50% 수준이 현실적입니다. Paper trading 6개월 이상 권장.
+
+자세한 검증 일지: **[docs/validation_journey.md](docs/validation_journey.md)**
 
 ---
 
-## 📊 검증 통계
+## 🤖 GitHub Actions
 
-- **검증 가설 수**: 23
-- **양수 알파 발견**: 4 (17%)
-- **데이터 포인트**: 169,525 (페니스탁 일봉) + 1,051,200 (BTC/XRP 1분봉) + 4,380 (funding events)
-- **검증 기간**: 2024.06 ~ 2026.06 (24개월)
-- **사용 데이터 소스**: yfinance (무료), Binance public API, Polygon Free tier
-- **개발 시간**: 약 1일 집중 세션
-- **총 코드 라인 수**: ~3,500
+### Daily scan (`daily_breakout_scan.yml`)
+- 일정: **Tue-Sat 06:00 UTC** (한국 15:00, 미국 마감 후)
+- 작업: fetch → (1일이면 retrain) → scan → HTML report → commit
+- 평균 runtime: ~3분 (incremental 모드)
+
+### Weekly report (`weekly_report.yml`)
+- 일정: **매주 토요일 07:00 UTC**
+- 작업: 그 주의 모든 시그널 + 누적 통계 + 시장 인사이트
+- 출력: `reports/_weekly_YYYY-WW.html`
+
+### Monthly retrain
+- `daily_breakout_scan.yml` 안에서 **매월 1일 또는 valid_until 만료 시** 자동 실행
+- 직전 3개월 데이터로 그리드 서치
+- `config/current_rule.json` 갱신
+
+### Manual trigger
+```bash
+gh workflow run daily_breakout_scan.yml \
+  -R stoneidev/pennysniper-validation \
+  -f as_of_date=2025-05-15  # optional backtest date
+```
+
+---
+
+## 📈 Live Data Sources
+
+| Source | Used for |
+|---|---|
+| yfinance | 일봉 OHLCV (incremental fetch) |
+| nasdaqtrader.com | NASDAQ 심볼 리스트 (warrants 제외) |
+
+**제외 필터:**
+- Symbol suffix: W (warrant), R (right), U (unit), Z (notes), PR* (preferred)
+- 1년 동안 한 번도 $0.30~$5.00 범위 안에 없던 종목 (mega-cap 등)
+
+---
+
+## 🚦 Risk Controls (운영 권장)
+
+```python
+# 권장 자본 운용
+MAX_POSITIONS_SIMULTANEOUS = 4
+ALLOCATION_PER_SIGNAL = 0.25  # 25% of cash
+DAILY_LOSS_LIMIT = -0.05      # halt if -5% NAV in a day
+MONTHLY_REVIEW = True          # stop if 3 consecutive negative months
+WARRANT_EXCLUSION = True       # auto-applied
+```
+
+**운영 사용 전 체크리스트:**
+- [ ] Paper trading 6개월 이상
+- [ ] 잃어도 괜찮은 금액만 투입 ($500-$1,000 권장)
+- [ ] 한국 거주자: 양도세 22% 미리 계산
+- [ ] 거래소: Alpaca / IBKR (warrant 자동 거부)
+- [ ] Stop conditions 미리 결정 (예: -50% 자본 시 종료)
+
+---
+
+## 🧪 Reproducing Past Reports
+
+May 2025, May 2026, June 2026 리포트 모두 재생성 가능:
+
+```bash
+# 5월 2025 (rule trained on 2025.01-03)
+python scripts/live/quarterly_retrain.py --as-of 2025-04-15 --out config/rule_2025_q2.json
+python scripts/live/generate_may_reports.py
+python scripts/live/may_summary.py
+
+# 5월 2026 (rule trained on 2026.01-03)
+python scripts/live/monthly_retrain.py --as-of 2026-04-15 --out config/rule_2026_q2.json
+python scripts/live/generate_may_2026_reports.py
+python scripts/live/may_2026_summary.py
+
+# 6월 2026 (rule trained on 2026.03-05, monthly retrain)
+python scripts/live/monthly_retrain.py --as-of 2026-06-01
+python scripts/live/generate_june_2026_reports.py
+python scripts/live/june_2026_summary.py
+```
+
+---
+
+## 🎓 Why This Project Exists
+
+원래 PRD v3.0은 **KNN + PPO RL 기반 페니스탁 day-trading**이었습니다.
+
+23개 가설을 정밀 검증한 결과:
+- 페니스탁 단기 자동매매에는 **알파 거의 없음**
+- RL은 같은 데이터에서 단순 룰을 **압도적으로 패배** (−999% vs +48%)
+- 살아남은 것: 단순한 breakout 룰 + 시장 적응형 (월별 재학습)
+
+이게 데이터가 가리킨 답입니다.
+**[docs/validation_journey.md](docs/validation_journey.md)** 에서 전체 여정.
+
+---
+
+## 📚 More Documentation
+
+- [validation_journey.md](docs/validation_journey.md) — 23 hypotheses 검증 일지
+- [findings.md](docs/findings.md) — 가설별 정밀 결과
+- [rolling_adaptive_findings.md](docs/rolling_adaptive_findings.md) — 적응형 시스템 발견
+- [scripts/live/README.md](scripts/live/README.md) — 운영 스크립트 상세
+
+---
+
+## ⚠️ Disclaimer
+
+- 본 시스템은 **개인 학습/연구용**입니다
+- 투자 권유 아님
+- Past performance ≠ future results
+- 슬리피지 / 세금 / 거래소 리스크 미반영 (백테스트 단순화)
+- 한국 거주자: 외환 거래 신고, 양도세 22% 등 별도 확인
+- **반드시 paper trading 검증 후 소액부터**
+
+---
+
+## 📝 License
+
+MIT — 자유롭게 사용/포크 가능
+
+## 🤝 Contributing
+
+발견한 버그나 개선 아이디어는 issue로 남겨주세요.
