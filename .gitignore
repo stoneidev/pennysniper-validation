@@ -36,3 +36,4 @@ results/csv/comovement_results.csv
 
 # Logs (optional, kept locally)
 results/*.log
+logs/
