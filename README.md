@@ -313,10 +313,15 @@ python scripts/live/june_2026_summary.py
 
 ## 📚 More Documentation
 
+### For developers / 코드 수정자
+- **[scripts_overview.md](docs/scripts_overview.md)** — 모든 스크립트 한눈에 ⭐
+- **[daily_report_guide.md](docs/daily_report_guide.md)** — `daily_report.py` 내부 구조 (수정 가이드) ⭐
+- [scripts/live/README.md](scripts/live/README.md) — 운영 스크립트 사용법 (cron 등)
+
+### For analysts / 검증 결과 보는 사람
 - [validation_journey.md](docs/validation_journey.md) — 23 hypotheses 검증 일지
 - [findings.md](docs/findings.md) — 가설별 정밀 결과
 - [rolling_adaptive_findings.md](docs/rolling_adaptive_findings.md) — 적응형 시스템 발견
-- [scripts/live/README.md](scripts/live/README.md) — 운영 스크립트 상세
 
 ---
 
