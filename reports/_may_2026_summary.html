@@ -1,180 +1,376 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>May 2026 Summary — Breakout Reports</title>
-  <style>
-:root {
-  --bg: #0f1115;
-  --panel: #181b22;
-  --panel-2: #1f232c;
-  --border: #2a2f3a;
-  --text: #e8e8ea;
-  --muted: #8b93a7;
-  --accent: #4f8cff;
-  --green: #1fbf75;
-  --red: #ff5b6c;
-  --yellow: #f5b342;
-}
-* { box-sizing: border-box; }
-body {
-  margin: 0; padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
-  background: var(--bg); color: var(--text); line-height: 1.5;
-}
-.container { max-width: 980px; margin: 0 auto; padding: 32px 20px 80px; }
-header { padding-bottom: 24px; border-bottom: 1px solid var(--border); margin-bottom: 28px; }
-h1 { margin: 0 0 6px; font-size: 26px; font-weight: 700; }
-.sub { color: var(--muted); font-size: 13px; }
-.nav { margin-top: 14px; }
-.nav a { display: inline-block; margin-right: 12px; color: var(--accent); text-decoration: none; font-size: 13px; }
-.nav a:hover { text-decoration: underline; }
-.card { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin-bottom: 20px; }
-.card h2 { margin: 0 0 14px; font-size: 16px; font-weight: 600; }
-.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-.stat { background: var(--panel-2); border-radius: 8px; padding: 14px; }
-.stat .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
-.stat .value { font-size: 22px; font-weight: 700; margin-top: 4px; font-variant-numeric: tabular-nums; }
-.stat .value.green { color: var(--green); }
-.stat .value.red { color: var(--red); }
-table.trades { width: 100%; border-collapse: collapse; }
-table.trades th, table.trades td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); font-size: 13px; }
-table.trades th { background: var(--panel-2); color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-size: 11px; }
-table.trades td.num { text-align: right; font-variant-numeric: tabular-nums; }
-table.trades td.sym { font-weight: 700; font-family: "SF Mono", Menlo, Consolas, monospace; }
-table.trades td.win { color: var(--green); font-weight: 600; }
-table.trades td.lose { color: var(--red); font-weight: 600; }
-.tag { display: inline-block; padding: 2px 8px; background: var(--panel-2); border: 1px solid var(--border); border-radius: 4px; font-size: 11px; color: var(--muted); margin-right: 4px; }
-.kv { display: grid; grid-template-columns: 200px 1fr; gap: 8px 16px; font-size: 14px; }
-.kv .k { color: var(--muted); }
-.kv .v { color: var(--text); }
-footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); color: var(--muted); font-size: 11px; line-height: 1.6; }
-.note { padding: 12px 16px; background: rgba(245, 179, 66, 0.08); border-left: 3px solid var(--yellow); border-radius: 4px; font-size: 13px; color: var(--text); margin: 12px 0; }
-</style>
-</head>
-<body>
-<div class="container">
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>May 2026 — Breakout Summary (Option A)</title><style>
+:root{--bg:#0f1115;--panel:#181b22;--panel-2:#1f232c;--border:#2a2f3a;--text:#e8e8ea;--muted:#8b93a7;--accent:#4f8cff;--green:#1fbf75;--red:#ff5b6c;--yellow:#f5b342;}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
+.container{max-width:1080px;margin:0 auto;padding:32px 20px 80px}
+header{padding-bottom:24px;border-bottom:1px solid var(--border);margin-bottom:28px}
+h1{margin:0 0 6px;font-size:26px;font-weight:700}h2{margin:0 0 14px;font-size:16px;font-weight:600}
+.sub{color:var(--muted);font-size:13px}.nav{margin-top:14px}.nav a{display:inline-block;margin-right:12px;color:var(--accent);text-decoration:none;font-size:13px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:20px}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.stat{background:var(--panel-2);border-radius:8px;padding:14px}
+.stat .label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.stat .value{font-size:22px;font-weight:700;margin-top:4px;font-variant-numeric:tabular-nums}
+.stat .value.green{color:var(--green)}.stat .value.red{color:var(--red)}
+table{width:100%;border-collapse:collapse}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);font-size:13px}
+th{background:var(--panel-2);color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-size:11px;font-weight:600}
+td.num{text-align:right;font-variant-numeric:tabular-nums}
+td.sym{font-weight:700;font-family:"SF Mono",Menlo,Consolas,monospace}
+td.win{color:var(--green);font-weight:600}td.lose{color:var(--red);font-weight:600}
+.tag{display:inline-block;padding:2px 8px;background:var(--panel-2);border:1px solid var(--border);border-radius:4px;font-size:11px;color:var(--muted);margin-right:4px}
+.kv{display:grid;grid-template-columns:200px 1fr;gap:8px 16px;font-size:14px}
+.kv .k{color:var(--muted)}.kv .v{color:var(--text)}
+footer{margin-top:40px;padding-top:20px;border-top:1px solid var(--border);color:var(--muted);font-size:11px}
+</style></head>
+<body><div class="container">
   <header>
-    <h1>May 2026 — Breakout Summary</h1>
-    <div class="sub">Aggregated outcome of all signals from May 1-29, 2026 daily reports.</div>
+    <h1>May 2026 — Breakout Summary (Option A)</h1>
+    <div class="sub">Aggregated outcome of all signals from this period.</div>
     <div class="nav">
       <a href="./index.html">← All reports</a>
-      <a href="https://github.com/stoneidev/pennysniper-validation">GitHub repo</a>
+      <a href="https://github.com/stoneidev/pennysniper-validation">GitHub</a>
     </div>
   </header>
-
   <div class="card">
-    <h2>Active Rule (trained on 2026.01-03)</h2>
+    <h2>Active Rule (Option A — wide grid + strict filter)</h2>
     <div class="kv">
-      <div class="k">Consolidation</div><div class="v">30 trading days all closed &lt; $1.00</div>
-      <div class="k">Entry range</div><div class="v">$1.20 – $1.50</div>
-      <div class="k">Take profit</div><div class="v">+15% (entry × 1.15)</div>
+      <div class="k">Consolidation</div><div class="v">60 trading days all closed &lt; $2.00</div>
+      <div class="k">Entry range</div><div class="v">$2.00 – $3.00</div>
+      <div class="k">Take profit</div><div class="v">+10% (entry × 1.10)</div>
       <div class="k">Max hold</div><div class="v">30 trading days</div>
       <div class="k">Slippage</div><div class="v">2% round-trip</div>
     </div>
-    <div style="margin-top:14px;">
-      <span class="tag">trained on 2026-01-01_2026-04-01</span>
-      <span class="tag">train N = 6</span>
-      <span class="tag">train win 100.0%</span>
-      <span class="tag">applied to 2026 Q2 (Apr-Jun)</span>
+    <div style="margin-top:14px">
+      <span class="tag">trained on 2026-02-01_2026-05-01</span>
+      <span class="tag">train N = 47</span>
+      <span class="tag">train win 81%</span>
+      <span class="tag">train mean +0.2%</span>
     </div>
   </div>
 
   <div class="card">
-    <h2>Aggregate Stats </h2>
+    <h2>Aggregate Stats (closed only)</h2>
     <div class="stats-grid">
-      <div class="stat"><div class="label">Total signals</div><div class="value">4</div></div>
-      <div class="stat"><div class="label">Closed trades</div><div class="value">4</div></div>
-      <div class="stat"><div class="label">TP +15% hit</div>
-        <div class="value green">100%</div></div>
-      <div class="stat"><div class="label">Mean net return</div>
-        <div class="value green">+13.0%</div></div>
+      <div class="stat"><div class="label">Total signals</div><div class="value">26</div></div>
+      <div class="stat"><div class="label">Closed</div><div class="value">18</div></div>
+      <div class="stat"><div class="label">TP +10% hit</div><div class="value green">100%</div></div>
+      <div class="stat"><div class="label">Mean net</div><div class="value green">+8.0%</div></div>
     </div>
-    
   </div>
 
   <div class="card">
     <h2>Trades</h2>
-    <table class="trades">
-      <thead>
-        <tr>
-          <th>Signal Date</th>
-          <th>Symbol</th>
-          <th>Entry Date</th>
-          <th class="num">Entry</th>
-          <th>Exit Date</th>
-          <th class="num">Exit</th>
-          <th>TP</th>
-          <th class="num">Days</th>
-          <th class="num">Net Return</th>
-        </tr>
-      </thead>
+    <table>
+      <thead><tr>
+        <th>Signal Date</th><th>Symbol</th><th>Entry Date</th><th class="num">Entry</th>
+        <th>Exit Date</th><th class="num">Exit</th><th>TP</th>
+        <th class="num">Days</th><th class="num">Net Return</th>
+      </tr></thead>
       <tbody>
         <tr>
+          <td>2026-05-01</td>
+          <td class="sym">ACRV</td>
+          <td>2026-05-04</td>
+          <td class="num">$2.09</td>
+          <td>still in flight</td>
+          <td class="num">—</td>
+          <td>—</td>
+          <td class="num">—</td>
+          <td class="num "><span class="tag">in flight</span></td>
+        </tr>
+        <tr>
+          <td>2026-05-01</td>
+          <td class="sym">HCHL</td>
+          <td>2026-05-04</td>
+          <td class="num">$2.01</td>
+          <td>2026-05-05</td>
+          <td class="num">$2.21</td>
+          <td>✓</td>
+          <td class="num">2</td>
+          <td class="num win">+8.0%</td>
+        </tr>
+        <tr>
+          <td>2026-05-01</td>
+          <td class="sym">STIM</td>
+          <td>2026-05-04</td>
+          <td class="num">$2.02</td>
+          <td>2026-05-05</td>
+          <td class="num">$2.22</td>
+          <td>✓</td>
+          <td class="num">2</td>
+          <td class="num win">+8.0%</td>
+        </tr>
+        <tr>
+          <td>2026-05-05</td>
+          <td class="sym">FATE</td>
+          <td>2026-05-06</td>
+          <td class="num">$2.40</td>
+          <td>2026-05-28</td>
+          <td class="num">$2.64</td>
+          <td>✓</td>
+          <td class="num">16</td>
+          <td class="num win">+8.0%</td>
+        </tr>
+        <tr>
+          <td>2026-05-06</td>
+          <td class="sym">LEDS</td>
+          <td>2026-05-07</td>
+          <td class="num">$2.08</td>
+          <td>2026-05-07</td>
+          <td class="num">$2.29</td>
+          <td>✓</td>
+          <td class="num">1</td>
+          <td class="num win">+8.0%</td>
+        </tr>
+        <tr>
+          <td>2026-05-06</td>
+          <td class="sym">PYXS</td>
+          <td>2026-05-07</td>
+          <td class="num">$2.30</td>
+          <td>2026-05-08</td>
+          <td class="num">$2.53</td>
+          <td>✓</td>
+          <td class="num">2</td>
+          <td class="num win">+8.0%</td>
+        </tr>
+        <tr>
+          <td>2026-05-08</td>
+          <td class="sym">LXRX</td>
+          <td>2026-05-11</td>
+          <td class="num">$2.01</td>
+          <td>2026-05-11</td>
+          <td class="num">$2.21</td>
+          <td>✓</td>
+          <td class="num">1</td>
+          <td class="num win">+8.0%</td>
+        </tr>
+        <tr>
+          <td>2026-05-08</td>
+          <td class="sym">SKYA</td>
+          <td>2026-05-11</td>
+          <td class="num">$2.03</td>
+          <td>still in flight</td>
+          <td class="num">—</td>
+          <td>—</td>
+          <td class="num">—</td>
+          <td class="num "><span class="tag">in flight</span></td>
+        </tr>
+        <tr>
+          <td>2026-05-11</td>
+          <td class="sym">BTBT</td>
           <td>2026-05-12</td>
-          <td class="sym">BZFD</td>
-          <td>2026-05-13</td>
-          <td class="num">$1.33</td>
-          <td>2026-05-15</td>
-          <td class="num">$1.53</td>
+          <td class="num">$2.08</td>
+          <td>still in flight</td>
+          <td class="num">—</td>
+          <td>—</td>
+          <td class="num">—</td>
+          <td class="num "><span class="tag">in flight</span></td>
+        </tr>
+        <tr>
+          <td>2026-05-11</td>
+          <td class="sym">STKE</td>
+          <td>2026-05-12</td>
+          <td class="num">$2.11</td>
+          <td>2026-05-14</td>
+          <td class="num">$2.32</td>
           <td>✓</td>
           <td class="num">3</td>
-          <td class="num win">+13.0%</td>
+          <td class="num win">+8.0%</td>
+        </tr>
+        <tr>
+          <td>2026-05-12</td>
+          <td class="sym">STAK</td>
+          <td>2026-05-13</td>
+          <td class="num">$1.95</td>
+          <td>2026-05-13</td>
+          <td class="num">$2.15</td>
+          <td>✓</td>
+          <td class="num">1</td>
+          <td class="num win">+8.0%</td>
+        </tr>
+        <tr>
+          <td>2026-05-12</td>
+          <td class="sym">TDIC</td>
+          <td>2026-05-13</td>
+          <td class="num">$2.98</td>
+          <td>2026-05-13</td>
+          <td class="num">$3.28</td>
+          <td>✓</td>
+          <td class="num">1</td>
+          <td class="num win">+8.0%</td>
         </tr>
         <tr>
           <td>2026-05-13</td>
-          <td class="sym">QUCY</td>
+          <td class="sym">ANY</td>
           <td>2026-05-14</td>
-          <td class="num">$1.90</td>
+          <td class="num">$2.11</td>
           <td>2026-05-14</td>
-          <td class="num">$2.18</td>
+          <td class="num">$2.32</td>
           <td>✓</td>
           <td class="num">1</td>
-          <td class="num win">+13.0%</td>
+          <td class="num win">+8.0%</td>
         </tr>
         <tr>
-          <td>2026-05-15</td>
-          <td class="sym">HCWB</td>
-          <td>2026-05-18</td>
-          <td class="num">$1.15</td>
-          <td>2026-05-18</td>
-          <td class="num">$1.32</td>
+          <td>2026-05-13</td>
+          <td class="sym">MBAI</td>
+          <td>2026-05-14</td>
+          <td class="num">$2.00</td>
+          <td>still in flight</td>
+          <td class="num">—</td>
+          <td>—</td>
+          <td class="num">—</td>
+          <td class="num "><span class="tag">in flight</span></td>
+        </tr>
+        <tr>
+          <td>2026-05-13</td>
+          <td class="sym">OABI</td>
+          <td>2026-05-14</td>
+          <td class="num">$2.01</td>
+          <td>2026-05-14</td>
+          <td class="num">$2.21</td>
           <td>✓</td>
           <td class="num">1</td>
-          <td class="num win">+13.0%</td>
+          <td class="num win">+8.0%</td>
+        </tr>
+        <tr>
+          <td>2026-05-13</td>
+          <td class="sym">SLNH</td>
+          <td>2026-05-14</td>
+          <td class="num">$2.16</td>
+          <td>still in flight</td>
+          <td class="num">—</td>
+          <td>—</td>
+          <td class="num">—</td>
+          <td class="num "><span class="tag">in flight</span></td>
+        </tr>
+        <tr>
+          <td>2026-05-14</td>
+          <td class="sym">IPHA</td>
+          <td>2026-05-15</td>
+          <td class="num">$2.16</td>
+          <td>still in flight</td>
+          <td class="num">—</td>
+          <td>—</td>
+          <td class="num">—</td>
+          <td class="num "><span class="tag">in flight</span></td>
+        </tr>
+        <tr>
+          <td>2026-05-18</td>
+          <td class="sym">GOVX</td>
+          <td>2026-05-19</td>
+          <td class="num">$1.95</td>
+          <td>2026-05-19</td>
+          <td class="num">$2.15</td>
+          <td>✓</td>
+          <td class="num">1</td>
+          <td class="num win">+8.0%</td>
+        </tr>
+        <tr>
+          <td>2026-05-18</td>
+          <td class="sym">SEGG</td>
+          <td>2026-05-19</td>
+          <td class="num">$2.40</td>
+          <td>still in flight</td>
+          <td class="num">—</td>
+          <td>—</td>
+          <td class="num">—</td>
+          <td class="num "><span class="tag">in flight</span></td>
+        </tr>
+        <tr>
+          <td>2026-05-20</td>
+          <td class="sym">HCWB</td>
+          <td>2026-05-21</td>
+          <td class="num">$2.17</td>
+          <td>2026-05-21</td>
+          <td class="num">$2.39</td>
+          <td>✓</td>
+          <td class="num">1</td>
+          <td class="num win">+8.0%</td>
+        </tr>
+        <tr>
+          <td>2026-05-20</td>
+          <td class="sym">MTVA</td>
+          <td>2026-05-21</td>
+          <td class="num">$2.60</td>
+          <td>2026-05-21</td>
+          <td class="num">$2.86</td>
+          <td>✓</td>
+          <td class="num">1</td>
+          <td class="num win">+8.0%</td>
+        </tr>
+        <tr>
+          <td>2026-05-22</td>
+          <td class="sym">BZFD</td>
+          <td>2026-05-26</td>
+          <td class="num">$2.13</td>
+          <td>still in flight</td>
+          <td class="num">—</td>
+          <td>—</td>
+          <td class="num">—</td>
+          <td class="num "><span class="tag">in flight</span></td>
+        </tr>
+        <tr>
+          <td>2026-05-22</td>
+          <td class="sym">LPRO</td>
+          <td>2026-05-26</td>
+          <td class="num">$2.12</td>
+          <td>2026-05-27</td>
+          <td class="num">$2.33</td>
+          <td>✓</td>
+          <td class="num">2</td>
+          <td class="num win">+8.0%</td>
+        </tr>
+        <tr>
+          <td>2026-05-26</td>
+          <td class="sym">CNEY</td>
+          <td>2026-05-27</td>
+          <td class="num">$2.08</td>
+          <td>2026-05-27</td>
+          <td class="num">$2.29</td>
+          <td>✓</td>
+          <td class="num">1</td>
+          <td class="num win">+8.0%</td>
+        </tr>
+        <tr>
+          <td>2026-05-26</td>
+          <td class="sym">SWAG</td>
+          <td>2026-05-27</td>
+          <td class="num">$2.04</td>
+          <td>2026-06-01</td>
+          <td class="num">$2.24</td>
+          <td>✓</td>
+          <td class="num">4</td>
+          <td class="num win">+8.0%</td>
         </tr>
         <tr>
           <td>2026-05-27</td>
-          <td class="sym">RKTO</td>
+          <td class="sym">QTEX</td>
           <td>2026-05-28</td>
-          <td class="num">$2.02</td>
-          <td>2026-06-02</td>
-          <td class="num">$2.32</td>
+          <td class="num">$2.56</td>
+          <td>2026-05-28</td>
+          <td class="num">$2.82</td>
           <td>✓</td>
-          <td class="num">4</td>
-          <td class="num win">+13.0%</td>
-        </tr>
-      </tbody>
+          <td class="num">1</td>
+          <td class="num win">+8.0%</td>
+        </tr></tbody>
     </table>
   </div>
 
   <div class="card">
-    <h2>₩1,000,000 Simulation (25% allocation per closed trade)</h2>
+    <h2>₩1,000,000 Simulation (25% allocation, closed)</h2>
     <div class="stats-grid">
       <div class="stat"><div class="label">Initial</div><div class="value">₩1,000,000</div></div>
-      <div class="stat"><div class="label">Final value</div>
-        <div class="value green">₩1,136,476</div></div>
-      <div class="stat"><div class="label">Total return</div>
-        <div class="value green">+13.6%</div></div>
+      <div class="stat"><div class="label">Final</div><div class="value green">₩1,428,246</div></div>
+      <div class="stat"><div class="label">Return</div><div class="value green">+42.8%</div></div>
       <div class="stat"><div class="label">Period</div><div class="value">May 2026</div></div>
     </div>
   </div>
 
   <div class="card">
-    <h2>All May 2026 Daily Reports</h2>
-    <ul style="padding-left:20px; margin:0;">
-<li><a href="./2026-05-01.html">2026-05-01</a></li>
+    <h2>Daily Reports</h2>
+    <ul style="padding-left:20px;margin:0"><li><a href="./2026-05-01.html">2026-05-01</a></li>
 <li><a href="./2026-05-04.html">2026-05-04</a></li>
 <li><a href="./2026-05-05.html">2026-05-05</a></li>
 <li><a href="./2026-05-06.html">2026-05-06</a></li>
@@ -195,14 +391,10 @@ footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border
 <li><a href="./2026-05-27.html">2026-05-27</a></li>
 <li><a href="./2026-05-28.html">2026-05-28</a></li>
 <li><a href="./2026-05-29.html">2026-05-29</a></li>
-
-    </ul>
+</ul>
   </div>
 
   <footer>
-    Past performance does not guarantee future results. Slippage, taxes, broker fees not fully modeled.
-    Paper-trade for 6+ months before deploying real capital.
+    Auto-generated. Past performance ≠ future. Slippage / taxes not fully modeled.
   </footer>
-</div>
-</body>
-</html>
+</div></body></html>
