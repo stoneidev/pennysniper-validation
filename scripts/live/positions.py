@@ -20,6 +20,7 @@ After every state-changing command, the positions HTML report is regenerated.
 """
 import argparse
 import json
+import subprocess
 import sys
 from pathlib import Path
 import pandas as pd
@@ -294,6 +295,12 @@ def main():
         "list": cmd_list, "cancel": cmd_cancel, "edit": cmd_edit,
     }
     funcs[args.command](args)
+
+    if args.command in {"buy", "sell", "cancel", "edit"}:
+        subprocess.run(
+            [sys.executable, str(Path(__file__).with_name("positions_report.py"))],
+            check=False,
+        )
 
 
 if __name__ == "__main__":

@@ -61,7 +61,7 @@ svg.curve { width:100%; height:200px; }
 <div class="container">
   <header>
     <h1>Positions & P&L</h1>
-    <div class="sub">Tracking your actual buys/sells against the system signals. Generated 2026-06-08T10:25:30.412715</div>
+    <div class="sub">Tracking your actual buys/sells against the system signals. Generated 2026-06-09T07:38:30.802169</div>
     <div class="nav">
       <a href="./index.html">← All reports</a>
       <a href="https://github.com/stoneidev/pennysniper-validation">GitHub</a>
@@ -72,21 +72,30 @@ svg.curve { width:100%; height:200px; }
     <h2>Cumulative (closed trades only)</h2>
     <div class="stats-grid">
       <div class="stat"><div class="label">Closed trades</div>
-        <div class="value">0</div></div>
+        <div class="value">1</div></div>
       <div class="stat"><div class="label">Win rate</div>
-        <div class="value muted">0.0%</div></div>
+        <div class="value green">100.0%</div></div>
       <div class="stat"><div class="label">Mean P&L</div>
-        <div class="value muted">+0.00%</div></div>
+        <div class="value green">+96.73%</div></div>
       <div class="stat"><div class="label">Realized KRW</div>
-        <div class="value muted">₩+0</div></div>
+        <div class="value green">₩+2,192,449</div></div>
     </div>
   </div>
 
   <div class="card">
     <h2>Capital curve — ₩1M with 25% allocation, sequential</h2>
-    <div class="empty">No closed trades to plot.</div>
+    
+<svg class="curve" viewBox="0 0 1000 200" preserveAspectRatio="none">
+  <line class="curve-grid" x1="20" y1="180.0" x2="980" y2="180.0"
+        stroke-dasharray="4,4"/>
+  <path class="curve-line" d="M 20.0 180.0 L 980.0 20.0"/>
+  <circle class="curve-point" cx="20.0" cy="180.0" r="2.5"/><circle class="curve-point" cx="980.0" cy="20.0" r="2.5"/>
+  <text x="980" y="174.0" fill="#8b93a7" font-size="10" text-anchor="end">₩1M start</text>
+  <text x="20" y="14" fill="#e8e8ea" font-size="11" font-weight="600">₩1,241,825</text>
+</svg>
+
     <div style="text-align:right; color:var(--muted); font-size:11px; margin-top:8px;">
-      Final: ₩1,000,000 (+0.0%)
+      Final: ₩1,241,825 (+24.2%)
     </div>
   </div>
 
@@ -108,7 +117,7 @@ svg.curve { width:100%; height:200px; }
   </div>
 
   <div class="card">
-    <h2>Closed History (0)</h2>
+    <h2>Closed History (1)</h2>
     <table>
       <thead>
         <tr>
@@ -118,7 +127,18 @@ svg.curve { width:100%; height:200px; }
           <th>Reason</th>
         </tr>
       </thead>
-      <tbody><tr><td colspan="9" class="empty">No closed trades yet.</td></tr>
+      <tbody>
+        <tr>
+          <td>20260609-GRAN</td>
+          <td class="sym">GRAN</td>
+          <td>2026-06-09</td>
+          <td>2026-06-09</td>
+          <td class="num">$1.33</td>
+          <td class="num">$2.62</td>
+          <td class="num win">+96.7%</td>
+          <td class="num win">+2,192,449</td>
+          <td class="muted">manual</td>
+        </tr>
       </tbody>
     </table>
   </div>
