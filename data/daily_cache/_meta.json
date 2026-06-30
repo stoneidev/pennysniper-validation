@@ -1,9 +1,9 @@
 {
-  "last_fetch": "2026-06-27T08:29:48.208351",
-  "universe_size": 1446,
-  "n_full_fetches": 1,
-  "n_incremental": 1445,
-  "n_skipped_pricerange": 1788,
-  "n_failed": 24,
+  "last_fetch": "2026-06-30T09:05:12.223382",
+  "universe_size": 1442,
+  "n_full_fetches": 3,
+  "n_incremental": 1439,
+  "n_skipped_pricerange": 1789,
+  "n_failed": 27,
   "n_cached_unchanged": 0
 }
