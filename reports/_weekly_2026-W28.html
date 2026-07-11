@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Weekly Report — 2026 W28</title>
+  <style>
+:root {
+  --bg:#0f1115; --panel:#181b22; --panel-2:#1f232c; --border:#2a2f3a;
+  --text:#e8e8ea; --muted:#8b93a7; --accent:#4f8cff;
+  --green:#1fbf75; --red:#ff5b6c; --yellow:#f5b342;
+}
+* { box-sizing: border-box; }
+body { margin:0; padding:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  background:var(--bg); color:var(--text); line-height:1.5; }
+.container { max-width:1080px; margin:0 auto; padding:32px 20px 80px; }
+header { padding-bottom:24px; border-bottom:1px solid var(--border); margin-bottom:28px; }
+h1 { margin:0 0 6px; font-size:28px; font-weight:700; letter-spacing:-0.01em; }
+h2 { margin:0 0 14px; font-size:16px; font-weight:600; }
+.sub { color:var(--muted); font-size:13px; }
+.nav { margin-top:14px; }
+.nav a { display:inline-block; margin-right:12px; color:var(--accent); text-decoration:none; font-size:13px; }
+.nav a:hover { text-decoration:underline; }
+
+.card { background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:20px; margin-bottom:20px; }
+.stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+.stat { background:var(--panel-2); border-radius:8px; padding:14px; }
+.stat .label { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; }
+.stat .value { font-size:22px; font-weight:700; margin-top:4px; font-variant-numeric:tabular-nums; }
+.stat .value.green { color:var(--green); }
+.stat .value.red { color:var(--red); }
+.stat .value.muted { color:var(--muted); }
+.stat .small { font-size:11px; color:var(--muted); margin-top:4px; }
+
+table { width:100%; border-collapse:collapse; }
+th, td { padding:10px 12px; text-align:left; border-bottom:1px solid var(--border); font-size:13px; }
+th { background:var(--panel-2); color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; font-size:11px; font-weight:600; }
+td.num { text-align:right; font-variant-numeric:tabular-nums; }
+td.sym { font-weight:700; font-family:"SF Mono",Menlo,Consolas,monospace; }
+td.win { color:var(--green); font-weight:600; }
+td.lose { color:var(--red); font-weight:600; }
+
+.tag { display:inline-block; padding:2px 8px; background:var(--panel-2); border:1px solid var(--border); border-radius:4px; font-size:11px; color:var(--muted); margin-right:4px; }
+.kv { display:grid; grid-template-columns:200px 1fr; gap:8px 16px; font-size:14px; }
+.kv .k { color:var(--muted); }
+.note { padding:12px 16px; background:rgba(245,179,66,0.08); border-left:3px solid var(--yellow); border-radius:4px; font-size:13px; margin:12px 0; }
+.callout { padding:14px 16px; border-radius:8px; margin:12px 0; font-size:13px; }
+.callout.pos { background:rgba(31,191,117,0.08); border-left:3px solid var(--green); }
+.callout.neg { background:rgba(255,91,108,0.08); border-left:3px solid var(--red); }
+.callout.neut { background:rgba(139,147,167,0.08); border-left:3px solid var(--muted); }
+
+footer { margin-top:40px; padding-top:20px; border-top:1px solid var(--border); color:var(--muted); font-size:11px; line-height:1.6; }
+
+.pill {
+  display:inline-block; padding:4px 10px; border-radius:999px;
+  font-size:12px; font-weight:600; margin-right:6px;
+}
+.pill.green { background:rgba(31,191,117,0.15); color:var(--green); }
+.pill.red { background:rgba(255,91,108,0.15); color:var(--red); }
+.pill.yellow { background:rgba(245,179,66,0.15); color:var(--yellow); }
+.pill.muted { background:rgba(139,147,167,0.15); color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>Weekly Insight Report — 2026 W28</h1>
+    <div class="sub">2026-07-06 (Mon) → 2026-07-12 (Sun)</div>
+    <div class="nav">
+      <a href="./index.html">← All reports</a>
+      <a href="https://github.com/stoneidev/pennysniper-validation">GitHub</a>
+    </div>
+  </header>
+
+  <div class="card">
+    <h2>Market Regime</h2>
+    <span class="pill muted">No breakouts this week</span>
+    <span class="tag">universe vol ~ 77.4%</span>
+    <div style="margin-top:10px; color:var(--muted); font-size:13px;">Possible bear market or post-mania normalization. Patience.</div>
+  </div>
+
+  <div class="card">
+    <h2>This Week</h2>
+    <div class="stats-grid">
+      <div class="stat"><div class="label">Signals fired</div>
+        <div class="value">0</div></div>
+      <div class="stat"><div class="label">Closed (TP hit or expired)</div>
+        <div class="value">0</div></div>
+      <div class="stat"><div class="label">Win rate</div>
+        <div class="value muted">—</div></div>
+      <div class="stat"><div class="label">Mean net return</div>
+        <div class="value muted">—</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Active Rule</h2>
+    <div class="kv">
+      <div class="k">Rule</div><div>30d cons / $1.20-$1.50 / TP +20% / hold 30d</div>
+      <div class="k">Trained on</div><div>2026-04-01_2026-07-01</div>
+      <div class="k">Train win rate</div><div>87.5% (N=8)</div>
+      <div class="k">Valid until</div><div>2026-07-31</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Cumulative (since first daily report)</h2>
+    <div class="stats-grid">
+      <div class="stat"><div class="label">Total signals</div>
+        <div class="value">7</div>
+        <div class="small">6 closed, 1 in flight</div></div>
+      <div class="stat"><div class="label">Cumulative win rate</div>
+        <div class="value green">100.0%</div></div>
+      <div class="stat"><div class="label">Mean net per trade</div>
+        <div class="value green">+18.00%</div></div>
+      <div class="stat"><div class="label">₩1M (25% allocation)</div>
+        <div class="value green">₩1,302,260</div>
+        <div class="small">+30.2%</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>This Week's Signals</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Signal Date</th>
+          <th>Symbol</th>
+          <th class="num">Today Close</th>
+          <th class="num">TP Target</th>
+          <th>Entry</th>
+          <th>Exit</th>
+          <th>Current</th>
+          <th>TP</th>
+          <th class="num">Net Return</th>
+        </tr>
+      </thead>
+      <tbody><tr><td colspan="9" style="text-align:center; color:var(--muted); padding:24px;">No signals this week.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Insights</h2>
+    <div class="callout neut">이번 주 시그널 없음. 시장이 조용한 상태.</div>
+<div class="callout neut">1건 holding 중 — 다음 주 결과에 따라 누적 통계 갱신 예정.</div>
+<div class="callout pos">누적 승률 100% — 룰의 장기 성과 견고.</div>
+<div class="callout neut">Paper trading 6개월 이상 검증 후 실전 권장. 슬리피지 5-10%, 양도세 22% 미반영.</div>
+
+  </div>
+
+  <footer>
+    Auto-generated weekly. Next report: next Saturday.
+    Past performance ≠ future results. Slippage, taxes, broker fees not fully modeled.
+  </footer>
+</div>
+</body>
+</html>
